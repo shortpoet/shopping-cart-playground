@@ -1,0 +1,69 @@
+FROM node:latest
+
+USER root
+
+# https://stackoverflow.com/a/38004106/12658653
+RUN apt-get -y update && apt-get install -y apt-transport-https
+
+RUN apt-get -y update  && \
+    apt-get install -y curl && \
+    apt-get install -y nmap && \
+    apt-get install -y postgresql-client && \
+    curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
+    apt-get install -y nodejs
+
+# RUN apt-get update -y && apt-get upgrade -y
+
+RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
+
+RUN curl https://packages.microsoft.com/config/ubuntu/16.04/prod.list | tee /etc/apt/sources.list.d/msprod.list
+
+RUN apt-get update 
+
+# RUN echo unixodbc-dev unixodbc-dev/ACCEPT_EULA boolean true | debconf-set-selections
+# RUN echo 'export ACCEPT_EULA=Y'
+
+# RUN echo 'export DEBIAN_FRONTEND=noninteractive'
+
+RUN ACCEPT_EULA=Y apt-get install -y mssql-tools
+
+RUN ACCEPT_EULA=Y apt-get install -y unixodbc-dev
+
+RUN apt-get update
+
+RUN ACCEPT_EULA=Y apt-get install -y mssql-tools
+
+RUN echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
+
+# to check if db is running
+# RUN apk add nmap netcat-openbsd postgresql-client
+
+# moving node modules up makes server fail to find .env for ormconfig
+# WORKDIR /usr/src
+WORKDIR /usr/src/app
+
+# RUN npm install -g --quiet --silent  webpack-dev-server tsc
+
+COPY server/package*.json ./
+
+RUN npm install --quiet --silent  && npm cache clean --force
+
+ENV PATH /usr/src/node_modules/.bin:$PATH
+
+WORKDIR /usr/src/app
+
+COPY ./server .
+
+EXPOSE 8080
+
+COPY docker/server/docker-entrypoint-server-u.sh docker/colors.cfg /usr/local/bin/
+
+# RUN chmod +x /docker-entrypoint-client.sh
+
+# ENTRYPOINT ["docker-entrypoint-server-u.sh"]
+
+LABEL maintainer="Carlos Soriano <shortpoet@github>"
+
+# CMD ["yarn", "--help"]
+
+# docker run --rm -it -v ${PWD}:/usr/src/app -v /usr/src/app/node_modules -p 3000:3000 ${COMPOSE_PROJECT_NAME}.server:ubuntu

@@ -85,10 +85,7 @@ docker-compose up
 ```bash
 mkdir server && cd server
 yarn init
-yarn add --dev typeorm reflect-metadata @types/node pg
-# yarn global add typeorm # optional as needed
-typeorm init --database postgres
-yarn add --dev ts-jest @types/jest express express-graphql graphql @types/cors @types/express class-validator cors ts-node-dev type-graphql 
+yarn add --dev typeorm reflect-metadata @types/node mssql ts-jest @types/jest express express-graphql graphql @types/cors @types/express class-validator cors ts-node-dev type-graphql
 ```
 
 - mssql

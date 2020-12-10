@@ -1,0 +1,79 @@
+version: "3.5"
+
+networks:
+  shopping_cart_net:
+    name: ${COMPOSE_PROJECT_NAME}_net
+    # driver: bridge
+
+volumes:
+  notused:
+  redis: {} # or :ro ; :rw
+
+services:
+
+  redis:
+    image: 'redis:3.2-alpine'
+    ports: 
+      - '${REDIS_PORT}:${REDIS_PORT}'
+    volumes:
+      - 'redis:/data'
+    networks:
+      - ${COMPOSE_PROJECT_NAME}net
+  
+  db.mssql:
+    image: ${COMPOSE_PROJECT_NAME}.db.mssql
+    restart: on-failure
+    # volumes:
+    #   - ../db/postgres/init:/docker-entrypoint-initdb.d/:ro
+    #   - ../db/postgres/postgres-data:${PGVOLUME}
+    build:
+      context: ../
+      dockerfile: docker/mssql/Dockerfile.db.mssql
+    env_file:
+      - ".env"
+    ports:
+      - 1433:1433
+    networks:
+      - ${COMPOSE_PROJECT_NAME}net
+    command: ['/bin/bash', './usr/src/app/mssql-entrypoint.sh']
+  
+  # blog.server.dev:
+  #   image: ${COMPOSE_PROJECT_NAME}.server:ubuntu
+  #   depends_on:
+  #     - db.${PROVIDER}
+  #     - redis
+  #   build:
+  #     context: ../
+  #     dockerfile: docker/server/Dockerfile.server.ubuntu
+  #   tty: true
+  #   stdin_open: true
+  #   working_dir: /usr/src/app
+  #   env_file:
+  #     - ".env"
+  #   ports:
+  #     - 5000:5000
+  #   volumes:
+  #     - ../server:/usr/src/app
+  #     - /usr/src/app/node_modules
+  #   networks:
+  #     - ${COMPOSE_PROJECT_NAME}net
+  #   command: ["docker-entrypoint-server-u.sh", "db.${PROVIDER}", "yarn", "start"]
+
+  # blog.client.dev.vue:
+  #   image: ${COMPOSE_PROJECT_NAME}.client:alpine
+  #   depends_on:
+  #     - db.${PROVIDER}
+  #   build:
+  #     context: ../
+  #     dockerfile: docker/client/Dockerfile.client.alpine
+  #   tty: true
+  #   environment:
+  #     NODE_ENV: development
+  #   ports:
+  #     - 8080:8080
+  #   volumes:
+  #     - ../client:/usr/src/app
+  #     - notused:/usr/src/app/node_modules
+  #   networks:
+  #     - ${COMPOSE_PROJECT_NAME}net
+  #   command: yarn vite
