@@ -1,4 +1,4 @@
-# shopping-cart-test
+# shopping-cart-playground
 
 This is a shopping cart playground.
 
