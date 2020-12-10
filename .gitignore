@@ -1,0 +1,65 @@
+.DS_Store
+node_modules
+/dist
+
+# local env files
+.env.local
+.env.*.local
+
+# all env files
+
+.env
+*.env
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+node_modules/
+build/
+tmp/
+temp/
+postgres-data/
+
+# Dependency directories
+node_modules/
+
+# dotenv environment variables file
+.env
+.DS_Store
+
+# google oauth info
+*credentials.json
+*keys.json
+
+client_secret.json
+application_credentials.json
+application_credentials.json
+credentials.json
+_credentials.json
+token.json
+
+*.config.json
+
+# client config
+_README.md
+config
+
+# private info
+*data.json
+
+#logs
+logs/
+*.log.*
+*.log
