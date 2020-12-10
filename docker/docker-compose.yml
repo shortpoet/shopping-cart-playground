@@ -18,7 +18,7 @@ services:
     volumes:
       - 'redis:/data'
     networks:
-      - ${COMPOSE_PROJECT_NAME}net
+      - ${COMPOSE_PROJECT_NAME}_net
   
   db.mssql:
     image: ${COMPOSE_PROJECT_NAME}.db.mssql
@@ -34,10 +34,10 @@ services:
     ports:
       - 1433:1433
     networks:
-      - ${COMPOSE_PROJECT_NAME}net
+      - ${COMPOSE_PROJECT_NAME}_net
     command: ['/bin/bash', './usr/src/app/mssql-entrypoint.sh']
   
-  # blog.server.dev:
+  # server.dev:
   #   image: ${COMPOSE_PROJECT_NAME}.server:ubuntu
   #   depends_on:
   #     - db.${PROVIDER}
@@ -59,7 +59,7 @@ services:
   #     - ${COMPOSE_PROJECT_NAME}net
   #   command: ["docker-entrypoint-server-u.sh", "db.${PROVIDER}", "yarn", "start"]
 
-  # blog.client.dev.vue:
+  # client.dev.vue:
   #   image: ${COMPOSE_PROJECT_NAME}.client:alpine
   #   depends_on:
   #     - db.${PROVIDER}

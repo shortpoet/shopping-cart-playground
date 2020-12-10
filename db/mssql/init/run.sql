@@ -76,7 +76,7 @@ CREATE TABLE [Logistics].[customers] (
   password VARCHAR(100) CHECK(DATALENGTH(password) > 9) NOT NULL
 );
 
-CREATE UNIQUE INDEX users_username_idx ON  [Logistics].[customer](username);
+CREATE UNIQUE INDEX users_username_idx ON  [Logistics].[customers](username);
 
 EXEC sys.sp_addextendedproperty @name=N'Comment', 
 @value=N'This holds customers for shopping-cart-playground' , @level0type=N'SCHEMA',@level0name=N'Logistics', 
