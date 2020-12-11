@@ -1,42 +1,47 @@
 {
-   "name": "server",
-   "version": "1.0.0",
-   "main": "index.js",
-   "repository": "https://github.com/shortpoet/shopping-cart-playground",
-   "author": "shortpoet (soriano.carlitos@gmail.com)",
-   "license": "MIT",
-   "private": false,
-   "devDependencies": {
-      "@types/cors": "^2.8.7",
-      "@types/express": "^4.17.7",
-      "@types/faker": "^5.1.5",
-      "@types/jest": "^26.0.9",
-      "@types/node": "^14.14.12",
-      "chalk": "^4.1.0",
-      "class-validator": "^0.12.2",
-      "cors": "^2.8.5",
-      "express": "^4.17.1",
-      "express-graphql": "^0.11.0",
-      "graphql": "^15.3.0",
-      "jest": "^26.2.2",
-      "reflect-metadata": "^0.1.13",
-      "ts-jest": "^26.1.4",
-      "ts-node": "3.3.0",
-      "ts-node-dev": "^1.0.0-pre.56",
-      "type-graphql": "^1.0.0-rc.3",
-      "typescript": "^3.9.7"
-   },
-   "dependencies": {
-      "moment": "^2.27.0",
-      "mssql": "^6.2.1",
-      "redis": "^3.0.2",
-      "reflect-metadata": "^0.1.13",
-      "typeorm": "^0.2.25",
-      "typeorm-seeding": "^1.6.1"
-   },
-   "scripts": {
-      "start": "ts-node src/index.ts",
-      "dev": "ts-node-dev src/index.ts",
-      "test": "yarn jest"
-   }
+  "name": "server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/shortpoet/shopping-cart-playground",
+  "author": "shortpoet (soriano.carlitos@gmail.com)",
+  "license": "MIT",
+  "private": false,
+  "devDependencies": {
+    "@types/cors": "^2.8.7",
+    "@types/express": "^4.17.7",
+    "@types/faker": "^5.1.5",
+    "@types/jest": "^26.0.9",
+    "@types/node": "^14.14.12",
+    "chalk": "^4.1.0",
+    "class-validator": "^0.12.2",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-graphql": "^0.11.0",
+    "graphql": "^15.3.0",
+    "jest": "^26.2.2",
+    "nodemon": "^2.0.6",
+    "reflect-metadata": "^0.1.13",
+    "ts-jest": "^26.1.4",
+    "ts-node": "3.3.0",
+    "ts-node-dev": "^1.0.0-pre.56",
+    "type-graphql": "^1.0.0-rc.3",
+    "typescript": "^3.9.7"
+  },
+  "dependencies": {
+    "moment": "^2.27.0",
+    "mssql": "^6.2.1",
+    "redis": "^3.0.2",
+    "reflect-metadata": "^0.1.13",
+    "typeorm": "^0.2.25",
+    "typeorm-seeding": "^1.6.1"
+  },
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "dev": "nodemon",
+    "test": "jest --watch",
+    "watch": "jest  --watch --coverage",
+    "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js",
+    "seed:config": "ts-node ./node_modules/typeorm-seeding/dist/cli.js config",
+    "seed:run": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed"
+  }
 }
