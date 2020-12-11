@@ -1,7 +1,6 @@
 #!/bin/sh
 set -e
 
-
 if [ "${DOCKER}" == "1" ]; then
   filename=$(basename $0)
   source colors.cfg
@@ -14,18 +13,6 @@ else
   filename=$(basename ${BASH_SOURCE})
   echo $PROVIDER
 fi
-
-
-# source colors.cfg
-# filename=$(basename $0)
-
-
-# dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-# PARENT=$(dirname $dir)
-# source "$PARENT/.env"
-# source "$PARENT/colors.cfg"
-# filename=$(basename ${BASH_SOURCE})
-# echo $PROVIDER
 
 echo -e "${CY}The ${YL}${COMPOSE_PROJECT_NAME} ${filename} ${CY}script has been executed"
 
@@ -44,7 +31,7 @@ done
 
 else
   echo -e "${GR}Running under ${LB}Sql Server"
-  until /opt/mssql-tools/bin/sqlcmd -S localhost -U test -P ${MSSQL_PASSWORD} -d shortpoetdb; do
+  until /opt/mssql-tools/bin/sqlcmd -S localhost -U test -P ${MSSQL_PASSWORD} -d ${MSSQL_DB}; do
   >&2 echo -e "${GR}Mssql is ${BO}unavailable ${GR}- sleeping"
   sleep 2
 done

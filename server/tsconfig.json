@@ -1,22 +1,16 @@
 {
   "compilerOptions": {
-    "lib": [
-      "es2018",
-      "dom",
-      "esnext"
-    ],
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "module": "esnext",
-    "target": "es2017",
-    "outDir": "dist",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "sourceMap": true,
-    "esModuleInterop": true,
-    "strict": true,
-    "noImplicitThis": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitReturns": true
+     "lib": [
+        "es5",
+        "es6"
+     ],
+     "target": "es5",
+     "module": "commonjs",
+     "moduleResolution": "node",
+     "outDir": "./build",
+     "emitDecoratorMetadata": true,
+     "experimentalDecorators": true,
+     "sourceMap": true,
+     "esModuleInterop": true
   }
 }

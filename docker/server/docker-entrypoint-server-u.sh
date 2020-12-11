@@ -48,9 +48,9 @@ done
 else
   echo -e "${GR}Running under ${LB}Sql Server"
   # sqlcmd -?
-  # sqlcmd -S db.mssql -U test -P  -d shortpoetdb -q "Select * from vcc.admin_users"
-  # sqlcmd -S 192.168.1.108 -U test -P  -d shortpoetdb -q "Select * from vcc.admin_users"
-  until sqlcmd -S db.mssql -U "${MSSQL_USER}" -P "${MSSQL_PASSWORD}" -d shortpoetdb -q ":exit"; do
+  # sqlcmd -S db.mssql -U test -P  -d ${MSSQL_DB} -q "Select * from vcc.admin_users"
+  # sqlcmd -S 192.168.1.108 -U test -P  -d ${MSSQL_DB} -q "Select * from vcc.admin_users"
+  until sqlcmd -S db.mssql -U "${MSSQL_USER}" -P "${MSSQL_PASSWORD}" -d ${MSSQL_DB} -q ":exit"; do
   >&2 echo -e "${GR}Mssql is ${BO}unavailable ${GR}- sleeping"
   sleep 2
 done

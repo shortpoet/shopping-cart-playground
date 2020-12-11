@@ -1,4 +1,11 @@
-IF DB_ID('shortpoetdb') IS NOT NULL
+ USE master;
+ ALTER DATABASE playground SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+ DROP DATABASE playground;
+ DROP USER test
+ DROP ROLE LogisticsAppUser_Role
+ DROP LOGIN test
+
+IF DB_ID('playground') IS NOT NULL
   set noexec on               -- prevent creation when already exists
 
 CREATE DATABASE playground;
@@ -8,7 +15,7 @@ USE playground;
 
 GO
 
-CREATE SCHEMA Logistics;
+CREATE SCHEMA logistics;
 
 GO
 
@@ -21,7 +28,7 @@ DECLARE @test varchar(64);
 
 
 SET @user = 'test';
-SET @defaultSchema = 'Logistics';
+SET @defaultSchema = 'logistics';
 SET @role = 'LogisticsAppUser_Role';
 SET @authorization = 'dbo';
 SET @pass = '$(MSSQL_PASSWORD)';
@@ -69,60 +76,49 @@ EXEC sp_executesql @cmd;
 
 GO
 
-
-CREATE TABLE [Logistics].[customers] (
+CREATE TABLE [logistics].[customers] (
   id INT PRIMARY KEY CLUSTERED,
-  username VARCHAR(100) NOT NULL,
-  password VARCHAR(100) CHECK(DATALENGTH(password) > 9) NOT NULL
+  first_name VARCHAR(100) NOT NULL,
+  last_name VARCHAR(100) NOT NULL,
 );
 
-CREATE UNIQUE INDEX users_username_idx ON  [Logistics].[customers](username);
-
 EXEC sys.sp_addextendedproperty @name=N'Comment', 
-@value=N'This holds customers for shopping-cart-playground' , @level0type=N'SCHEMA',@level0name=N'Logistics', 
+@value=N'This holds customers for shopping-cart-playground' , @level0type=N'SCHEMA',@level0name=N'logistics', 
 @level1type=N'TABLE',@level1name=N'customers'
 
-CREATE TABLE [Logistics].[products] (
+CREATE TABLE [logistics].[products] (
   id INT PRIMARY KEY CLUSTERED,
+  product_name VARCHAR(100) NOT NULL,
   cost INT NOT NULL
 );
 
+--CREATE UNIQUE INDEX products_product_name_idx ON  [logistics].[products](product_name);
+
 EXEC sys.sp_addextendedproperty @name=N'Comment', 
-@value=N'This holds products for shopping-cart-playground' , @level0type=N'SCHEMA',@level0name=N'Logistics', 
+@value=N'This holds products for shopping-cart-playground' , @level0type=N'SCHEMA',@level0name=N'logistics', 
 @level1type=N'TABLE',@level1name=N'products'
 
-CREATE TABLE [Logistics].[purchases] (
+CREATE TABLE [logistics].[purchases] (
   id INT PRIMARY KEY CLUSTERED,
   product_id INT NOT NULL,
+  transaction_id INT NOT NULL,
   quantity INT NOT NULL
 );
 
 EXEC sys.sp_addextendedproperty @name=N'Comment', 
-@value=N'This holds purchases for shopping-cart-playground' , @level0type=N'SCHEMA',@level0name=N'Logistics', 
+@value=N'This holds purchases for shopping-cart-playground' , @level0type=N'SCHEMA',@level0name=N'logistics', 
 @level1type=N'TABLE',@level1name=N'purchases'
 
-CREATE TABLE [Logistics].[transactions] (
+CREATE TABLE [logistics].[transactions] (
   id INT PRIMARY KEY CLUSTERED,
   customer_id INT NOT NULL,
   rewards_points INT NOT NULL
 );
 
 EXEC sys.sp_addextendedproperty @name=N'Comment', 
-@value=N'This holds transactions for shopping-cart-playground' , @level0type=N'SCHEMA',@level0name=N'Logistics', 
+@value=N'This holds transactions for shopping-cart-playground' , @level0type=N'SCHEMA',@level0name=N'logistics', 
 @level1type=N'TABLE',@level1name=N'transactions'
 
-CREATE TABLE [Logistics].[transaction_purchases] (
-  id INT PRIMARY KEY CLUSTERED,
-  transaction_id INT NOT NULL,
-  purchase_id INT NOT NULL
-);
-
-EXEC sys.sp_addextendedproperty @name=N'Comment', 
-@value=N'This holds the join table for purchases per transactions for shopping-cart-playground' , @level0type=N'SCHEMA',@level0name=N'Logistics', 
-@level1type=N'TABLE',@level1name=N'transaction_purchases'
-
-
-ALTER TABLE [Logistics].[purchases] ADD FOREIGN KEY (product_id) REFERENCES [Logistics].[products](id) ON DELETE NO ACTION ON UPDATE CASCADE;
-ALTER TABLE [Logistics].[transactions] ADD FOREIGN KEY (customer_id) REFERENCES [Logistics].[customers](id) ON DELETE NO ACTION ON UPDATE CASCADE;
-ALTER TABLE [Logistics].[transaction_purchases] ADD FOREIGN KEY (transaction_id) REFERENCES [Logistics].[transactions](id) ON DELETE NO ACTION ON UPDATE CASCADE;
-ALTER TABLE [Logistics].[transaction_purchases] ADD FOREIGN KEY (purchase_id) REFERENCES [Logistics].[purchases](id) ON DELETE NO ACTION ON UPDATE CASCADE;
+ALTER TABLE [logistics].[purchases] ADD FOREIGN KEY (product_id) REFERENCES [logistics].[products](id) ON DELETE NO ACTION ON UPDATE CASCADE;
+ALTER TABLE [logistics].[purchases] ADD FOREIGN KEY (transaction_id) REFERENCES [logistics].[transactions](id) ON DELETE NO ACTION ON UPDATE CASCADE;
+ALTER TABLE [logistics].[transactions] ADD FOREIGN KEY (customer_id) REFERENCES [logistics].[customers](id) ON DELETE NO ACTION ON UPDATE CASCADE;

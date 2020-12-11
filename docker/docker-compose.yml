@@ -37,27 +37,27 @@ services:
       - ${COMPOSE_PROJECT_NAME}_net
     command: ['/bin/bash', './usr/src/app/mssql-entrypoint.sh']
   
-  # server.dev:
-  #   image: ${COMPOSE_PROJECT_NAME}.server:ubuntu
-  #   depends_on:
-  #     - db.${PROVIDER}
-  #     - redis
-  #   build:
-  #     context: ../
-  #     dockerfile: docker/server/Dockerfile.server.ubuntu
-  #   tty: true
-  #   stdin_open: true
-  #   working_dir: /usr/src/app
-  #   env_file:
-  #     - ".env"
-  #   ports:
-  #     - 5000:5000
-  #   volumes:
-  #     - ../server:/usr/src/app
-  #     - /usr/src/app/node_modules
-  #   networks:
-  #     - ${COMPOSE_PROJECT_NAME}net
-  #   command: ["docker-entrypoint-server-u.sh", "db.${PROVIDER}", "yarn", "start"]
+  server.dev:
+    image: ${COMPOSE_PROJECT_NAME}.server:ubuntu
+    depends_on:
+      - db.${PROVIDER}
+      - redis
+    build:
+      context: ../
+      dockerfile: docker/server/Dockerfile.server.ubuntu
+    tty: true
+    stdin_open: true
+    working_dir: /usr/src/app
+    env_file:
+      - ".env"
+    ports:
+      - 5000:5000
+    volumes:
+      - ../server:/usr/src/app
+      - /usr/src/app/node_modules
+    networks:
+      - ${COMPOSE_PROJECT_NAME}_net
+    command: ["docker-entrypoint-server-u.sh", "db.${PROVIDER}", "yarn", "start"]
 
   # client.dev.vue:
   #   image: ${COMPOSE_PROJECT_NAME}.client:alpine
