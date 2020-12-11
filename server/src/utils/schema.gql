@@ -6,7 +6,7 @@
 type PurchaseEntity {
   id: ID!
   productId: Int!
-  quantity: Float!
+  quantity: Int!
   transaction: TransactionEntity!
   transactionId: Int!
 }
@@ -19,5 +19,6 @@ type TransactionEntity {
   customerId: Int!
   id: ID!
   purchases: [PurchaseEntity!]!
-  rewardsPoints: Float!
+  rewardsPoints: Int!
+  total: Int!
 }

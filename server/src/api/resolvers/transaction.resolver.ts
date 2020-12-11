@@ -1,9 +1,9 @@
 import { Resolver, Query, Arg, Info, Mutation } from "type-graphql";
 import { getRepository } from "typeorm";
 import { GraphQLResolveInfo } from "graphql";
-import { chalkLog } from "../utils/chalkLog";
+import { chalkLog } from "../../utils/chalkLog";
+import { Transaction } from "../../interfaces/Transaction";
 import { TransactionEntity } from "../entity/TransactionEntity";
-import { Transaction } from "../interfaces/Transaction";
 
 @Resolver(of => TransactionEntity)
 export class TransactionResolver {

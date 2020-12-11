@@ -1,7 +1,7 @@
 import {Entity, PrimaryGeneratedColumn, Column, OneToMany} from "typeorm";
 import { ObjectType, Field, ID, Arg } from "type-graphql";
-import { Customer } from "../interfaces/Customer";
-import { Transaction } from "../interfaces/Transaction";
+import { Customer } from "../../interfaces/Customer";
+import { Transaction } from "../../interfaces/Transaction";
 import { TransactionEntity } from "./TransactionEntity";
 
 @ObjectType()
@@ -12,7 +12,6 @@ export class CustomerEntity implements Customer {
   @PrimaryGeneratedColumn()
   id: number;
   
-  // @Field(type => ID)
   @Field()
   @Column({ name: 'first_name' })
   firstName: string;

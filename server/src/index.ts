@@ -3,10 +3,10 @@ import cors from 'cors';
 import { createConnection, getConnection } from "typeorm";
 import { graphqlHTTP }from 'express-graphql';
 import { generateSchema } from "./utils/generateSchema";
-import { TransactionResolver } from './resolvers/transaction.resolver';
 import { loggingMiddleware } from './middleware/loggingMiddleware';
 import { redisMiddleware } from './middleware/redisMiddleware';
-import { TransactionEntity } from './entity/TransactionEntity';
+import { TransactionEntity } from './api/entity/TransactionEntity';
+import { TransactionResolver } from './api/resolvers/transaction.resolver';
 
 // const config = require('../ormconfig.js');
 

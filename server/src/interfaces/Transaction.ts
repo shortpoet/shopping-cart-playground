@@ -5,6 +5,7 @@ import { Purchase } from './Purchase';
 export interface Transaction {
   id: number;
   customerId: Customer['id'];
+  total: number;
   rewardsPoints: number;
   purchases: Purchase[];
 }

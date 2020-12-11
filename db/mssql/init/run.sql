@@ -92,7 +92,7 @@ CREATE TABLE [logistics].[products] (
   cost INT NOT NULL
 );
 
---CREATE UNIQUE INDEX products_product_name_idx ON  [logistics].[products](product_name);
+CREATE UNIQUE INDEX products_product_name_idx ON  [logistics].[products](product_name);
 
 EXEC sys.sp_addextendedproperty @name=N'Comment', 
 @value=N'This holds products for shopping-cart-playground' , @level0type=N'SCHEMA',@level0name=N'logistics', 
@@ -112,6 +112,7 @@ EXEC sys.sp_addextendedproperty @name=N'Comment',
 CREATE TABLE [logistics].[transactions] (
   id INT PRIMARY KEY CLUSTERED,
   customer_id INT NOT NULL,
+  total INT NOT NULL,
   rewards_points INT NOT NULL
 );
 

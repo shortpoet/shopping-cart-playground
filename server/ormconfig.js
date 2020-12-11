@@ -57,7 +57,7 @@ const config = process.env.PROVIDER === 'postgres'
 module.exports = {
     ...config,
   "entities": [
-      "src/entity/**/*.ts"
+      "src/api/entity/**/*.ts"
    ],
    "migrations": [
       "src/migration/**/*.ts"

@@ -1,6 +1,6 @@
 import {Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, JoinColumn} from "typeorm";
 import { ObjectType, Field, ID, Int, GraphQLISODateTime } from "type-graphql";
-import { Product } from "../interfaces/Product";
+import { Product } from "../../interfaces/Product";
 require("dotenv").config();
 console.log("$# Entity Config @7");
 console.log("$# PROVIDER @7");
@@ -15,9 +15,9 @@ export class ProductEntity implements Product {
   @Field(type => ID)
   @PrimaryGeneratedColumn()
   id: number;
-  k
+  
   @Field()
-  @Column({ name: 'product_name' })
+  @Column({ name: 'product_name', unique: true })
   productName: string;
   
   @Field(type => Int)
