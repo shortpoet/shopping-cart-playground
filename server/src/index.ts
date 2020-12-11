@@ -10,9 +10,9 @@ import { TransactionResolver } from './api/resolvers/transaction.resolver';
 
 // const config = require('../ormconfig.js');
 
-export default class Application {
-  app: Express
-}
+// export default class Application {
+//   app: Express
+// }
 
 const util = require('util');
 (async () => {

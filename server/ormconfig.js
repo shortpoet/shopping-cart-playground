@@ -3,13 +3,13 @@ console.log("$# DOCKER @7");
 console.log(process.env.DOCKER);
 console.log("$# PROVIDER @7");
 console.log(process.env.PROVIDER);
-const postgresHost = process.env.DOCKER === "1" 
+const postgresHost = process.env.DOCKER === "1"
   ? process.env.POSTGRES_HOST
   : process.env.POSTGRES_HOST_LOCAL
-const mssqlHost = process.env.DOCKER === "1" 
+const mssqlHost = process.env.DOCKER === "1"
   ? process.env.MSSQL_HOST
   : process.env.MSSQL_HOST_LOCAL
-const azureHost = process.env.DOCKER === "1" 
+const azureHost = process.env.DOCKER === "1"
   ? process.env.AZURE_HOST
   : process.env.AZURE_HOST_LOCAL
 // console.log("$# POSTGRES_HOST @7");
@@ -33,7 +33,7 @@ const mssqlConfig = {
   "password": process.env.MSSQL_PASSWORD,
   "database": process.env.MSSQL_DB,
   "synchronize": false,
-  "logging": true, 
+  "logging": true,
 }
 
 const azureConfig = {
@@ -43,31 +43,37 @@ const azureConfig = {
   "password": process.env.AZURE_PASSWORD,
   "database": process.env.AZURE_DB,
   "synchronize": false,
-  "logging": true, 
+  "logging": true,
 }
 
-const config = process.env.PROVIDER === 'postgres'
+const config = process.env.PROVIDER === "postgres"
   ? postgresConfig
-    : process.env.PROVIDER === 'mssql'
-      ? mssqlConfig
-        : process.env.PROVIDER === 'azure'
-          ? azureConfig
-  : {}
+  : process.env.PROVIDER === "mssql"
+    ? mssqlConfig
+    : process.env.PROVIDER === "azure"
+      ? azureConfig
+      : {}
 
 module.exports = {
-    ...config,
-  "entities": [
-      "src/api/entity/**/*.ts"
-   ],
-   "migrations": [
-      "src/migration/**/*.ts"
-   ],
-   "subscribers": [
-      "src/subscriber/**/*.ts"
-   ],
-   "cli": {
-      "entitiesDir": "src/entity",
-      "migrationsDir": "src/migration",
-      "subscribersDir": "src/subscriber"
-   }
+  ...config,
+  entities: [
+    "src/api/entity/**/*.ts"
+  ],
+  migrations: [
+    "src/orm/migration/**/*.ts"
+  ],
+  subscribers: [
+    "src/orm/subscriber/**/*.ts"
+  ],
+  seeds: [
+    "src/orm/seeds/**/*{.ts,.js}"
+  ],
+  factories: [
+    "src/orm/factories/**/*{.ts,.js}"
+  ],
+  cli: {
+    entitiesDir: "src/api/entity",
+    migrationsDir: "src/orm/migration",
+    subscribersDir: "src/orm/subscriber"
+  }
 };
