@@ -3,6 +3,13 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+type CustomerEntity {
+  firstName: String!
+  id: ID!
+  lastName: String!
+  transactions: [TransactionEntity!]!
+}
+
 type PurchaseEntity {
   id: ID!
   productId: Int!
@@ -16,6 +23,7 @@ type Query {
 }
 
 type TransactionEntity {
+  customer: CustomerEntity!
   customerId: Int!
   id: ID!
   purchases: [PurchaseEntity!]!

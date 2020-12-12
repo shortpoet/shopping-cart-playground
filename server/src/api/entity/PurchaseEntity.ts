@@ -19,9 +19,9 @@ export class PurchaseEntity implements Purchase {
   productId: number;
   product: Product;
 
-  @Field(type => Int)
-  @Column({ name: 'transaction_id' })
-  transactionId: number;
+  @Field()
+  @Column({ name: 'transaction_id'})
+  transactionId: string;
   @Field(type => TransactionEntity)
   @ManyToOne(type => TransactionEntity, transactionEntity => transactionEntity.purchases, {
     // eager: true

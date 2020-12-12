@@ -5,7 +5,7 @@ import { Transaction } from "../../interfaces/Transaction";
 import { TransactionEntity } from "./TransactionEntity";
 
 @ObjectType()
-@Entity({ name: `admin_users`, schema: 'vcc' })
+@Entity({ name: `customers`, schema: 'logistics' })
 export class CustomerEntity implements Customer {
 
   @Field(type => ID)
@@ -21,8 +21,8 @@ export class CustomerEntity implements Customer {
   lastName: string;
 
   @Field(type => [TransactionEntity])
-  @OneToMany(type => TransactionEntity, transaction => transaction.customerId, {
-    eager: true,
+  @OneToMany(type => TransactionEntity, transaction => transaction.customer, {
+    // eager: true,
     nullable: true
   })
   transactions?: Transaction[];
