@@ -8,16 +8,19 @@ import { Purchase } from "../../interfaces/Purchase";
 
 interface Context {
   productId: Product['id'];
+  quantity: Purchase['quantity'];
   transactionId: Transaction['id'];
 }
 
 define(PurchaseEntity, (faker: typeof Faker, context: Context): Purchase => {
   // faker.seed(8);
-  const { productId, transactionId } = context;
+  console.log(context);
+  
+  const { productId, transactionId, quantity } = context;
   const purchase = new PurchaseEntity();
   purchase.product = factory(ProductEntity)() as any;
   purchase.productId = productId;
   purchase.transactionId = transactionId;
-  purchase.quantity = faker.random.number({ min: 1, max: 5 });
+  purchase.quantity = quantity;
   return purchase;
 });

@@ -15,22 +15,27 @@ export class CreateCustomer implements Seeder {
     const customers = await connection.getRepository(CustomerEntity).find();
     const products = await connection.getRepository(ProductEntity).find();
     const productIds = products.map(p => p.id);
-    for (const customer of customers) {
+    console.log(productIds);
+    customers.forEach(async (customer: CustomerEntity) => {
       const purchases: PurchaseEntity[] = [];
-      const purchaseFactories: EntityFactory<PurchaseEntity, unknown>[] = [];
       const { id: customerId } = customer;
       const transactionId = Date.now().toString();
       const purchaseNum = random.number({ min: 1, max: 8 });
       console.log('purchase num');
       console.log(purchaseNum);
-      for (let i = 0; i <= purchaseNum; i++) {
-        const purchaseFactory = await factory(PurchaseEntity)({
-          productId: productIds[random.number({ min: 1, max: 36 })],
-          transactionId: transactionId
-        })
-        purchaseFactories.push(purchaseFactory);
-        purchases.push(await purchaseFactory.make());
-      }
+      for (let i = 1; i <= purchaseNum; i++) {
+        const p = new PurchaseEntity();
+        const randomId = random.number({ min: 1, max: 36 });
+        console.log(randomId);
+        
+        p.product = products.filter((p: ProductEntity) => p.id == randomId)[0];
+        p.productId = randomId;
+        p.quantity = random.number({ min: 1, max: 5 });
+        p.transactionId = transactionId;
+        purchases.push(p);
+      };  
+      console.log(purchases);
+      
       const total: number = purchases.reduce((total, purchase) => total += purchase.product.cost * purchase.quantity, 0);
       //   A customer receives 2 points for every dollar spent over $100 in each transaction, plus 1 point for every dollar spent over $50 in each transaction
       // (e.g. a $120 purchase = 2x$20 + 1x$50 = 90 points).
@@ -47,10 +52,20 @@ export class CreateCustomer implements Seeder {
         total: total,
         rewardsPoints: rewardsPoints
       }).create();
-      console.log(purchaseFactories.length);
-      
-      purchaseFactories.forEach(async f => await f.create())
-    }
+      console.log(purchases.length);
+      // await factory(PurchaseEntity)({productId: purchases[0].product.id, quantity: purchases[0].quantity, transactionId: purchases[0].transactionId})
+      //   .map(async (purchase: PurchaseEntity) => 
+      //     await factory(PurchaseEntity)({
+      //       productId: purchase.productId, quantity: purchase.quantity, transactionId: purchase.transactionId
+      //     }).make()
+      //   )
+      //   .createMany(purchases.length)
+        // .createMany(purchases.length, {productId: purchases[0].product.id, quantity: purchases[0].quantity, transactionId: purchases[0].transactionId})
+      purchases.forEach(async(f: PurchaseEntity) =>
+        await factory(PurchaseEntity)({productId: f.productId, quantity: f.quantity, transactionId: f.transactionId}).create()
+      )
+
+    });
 
   }
 }
