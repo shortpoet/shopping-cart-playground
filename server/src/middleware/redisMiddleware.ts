@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { chalkLog } from '../utils/chalkLog';
-const redis = require("redis");
+// const redis = require("redis");
+import redis from 'redis';
 console.log("$# REDIS Config @7");
 
 class RedisMock {

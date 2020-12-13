@@ -1,4 +1,5 @@
-const chalk = require('chalk')
+// const chalk = require('chalk')
+import chalk from 'chalk';
 import {inspect} from 'util'
 
 // const _log  = () => Function.prototype.bind.call(console.log, console, 'LOG_ALIAS')

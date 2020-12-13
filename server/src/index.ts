@@ -7,6 +7,9 @@ import { loggingMiddleware } from './middleware/loggingMiddleware';
 import { redisMiddleware } from './middleware/redisMiddleware';
 import { TransactionEntity } from './api/entity/TransactionEntity';
 import { TransactionResolver } from './api/resolvers/transaction.resolver';
+// const util = require('util');
+// import util from 'util';
+
 
 // const config = require('../ormconfig.js');
 
@@ -14,7 +17,6 @@ import { TransactionResolver } from './api/resolvers/transaction.resolver';
 //   app: Express
 // }
 
-const util = require('util');
 (async () => {
   // console.log(config);
   // could insert config as options into createConnection 

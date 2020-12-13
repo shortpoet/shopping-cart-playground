@@ -10,16 +10,23 @@ type CustomerEntity {
   transactions: [TransactionEntity!]!
 }
 
+type ProductEntity {
+  cost: Int!
+  id: ID!
+  productName: String!
+}
+
 type PurchaseEntity {
   id: ID!
+  product: ProductEntity!
   productId: Int!
   quantity: Int!
   transaction: TransactionEntity!
-  transactionId: Int!
+  transactionId: String!
 }
 
 type Query {
-  users: [TransactionEntity!]
+  transactions: [TransactionEntity!]
 }
 
 type TransactionEntity {

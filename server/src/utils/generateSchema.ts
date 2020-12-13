@@ -1,6 +1,7 @@
 import { BuildSchemaOptions, buildSchema } from "type-graphql";
 import { GraphQLSchema } from "graphql";
-const path = require('path');
+// const path = require('path');
+import path from 'path';
 export async function generateSchema(
   ...resolvers: BuildSchemaOptions['resolvers']
 ): Promise<GraphQLSchema> {

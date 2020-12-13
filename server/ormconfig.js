@@ -21,9 +21,7 @@ const postgresConfig = {
   "port": 5432,
   "username": process.env.POSTGRES_USER,
   "password": process.env.POSTGRES_PASSWORD,
-  "database": process.env.POSTGRES_DB,
-  "synchronize": false,
-  "logging": true
+  "database": process.env.POSTGRES_DB
 }
 
 const mssqlConfig = {
@@ -31,9 +29,7 @@ const mssqlConfig = {
   "host": mssqlHost,
   "username": process.env.MSSQL_USER,
   "password": process.env.MSSQL_PASSWORD,
-  "database": process.env.MSSQL_DB,
-  "synchronize": false,
-  "logging": true,
+  "database": process.env.MSSQL_DB
 }
 
 const azureConfig = {
@@ -41,9 +37,7 @@ const azureConfig = {
   "host": azureHost,
   "username": process.env.AZURE_USER,
   "password": process.env.AZURE_PASSWORD,
-  "database": process.env.AZURE_DB,
-  "synchronize": false,
-  "logging": true,
+  "database": process.env.AZURE_DB
 }
 
 const config = process.env.PROVIDER === "postgres"
@@ -56,6 +50,9 @@ const config = process.env.PROVIDER === "postgres"
 
 module.exports = {
   ...config,
+  "synchronize": false,
+  "logging": false,
+  "migrationsRun": false,
   entities: [
     "src/api/entity/**/*.ts"
   ],

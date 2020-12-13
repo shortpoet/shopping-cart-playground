@@ -9,7 +9,7 @@ import { TransactionEntity } from "../entity/TransactionEntity";
 export class TransactionResolver {
 
   @Query(returns => [TransactionEntity], { nullable: true })
-  async users(): Promise<Transaction[]> {
+  async transactions(): Promise<Transaction[]> {
     const transactionsPromise = getRepository(TransactionEntity).find();
     const transactions = await transactionsPromise;
     chalkLog('magentaBright', '#### database fetch ####');

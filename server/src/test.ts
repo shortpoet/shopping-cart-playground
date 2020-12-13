@@ -5,7 +5,8 @@ import { PurchaseEntity } from "./api/entity/PurchaseEntity";
 import { TransactionEntity } from "./api/entity/TransactionEntity";
 import { Customer } from "./interfaces/Customer";
 
-const faker = require("faker");
+import faker from 'faker';
+
 faker.seed(8);
 const product = new ProductEntity();
 product.productName = faker.commerce.productName();
