@@ -63,6 +63,8 @@ SET @cmd =
 	
 	GRANT UPDATE ON SCHEMA::' + @authorization + ' TO ' + @role + '
 	
+  ALTER AUTHORIZATION ON SCHEMA::' + @defaultSchema + ' TO ' + @role + '
+	
 	GRANT REFERENCES ON SCHEMA::' + @authorization + ' TO ' + @role + '
 	
 	EXEC sp_addrolemember N''' + @role +''', ' + @user + '
