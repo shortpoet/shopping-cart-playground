@@ -40,15 +40,31 @@ const handleConnection = async () => {
   return connection
 }
 
+interface PurchaseContext {
+  product: ProductEntity;
+  transactionId: TransactionEntity['id'];
+  quantity: PurchaseEntity['quantity'];
+}
+interface TransactionContext {
+  customerId: CustomerEntity['id'];
+  transactionId: TransactionEntity['id'];
+  total: TransactionEntity['total'];
+  rewardsPoints: TransactionEntity['rewardsPoints'];
+}
+
 class SeedHandler<T> {
-  public constructor(private c: { new(): T }) { }
+  private queryRunner: QueryRunner;
+  public constructor(private c: { new(): T }, queryRunner) {
+    this.queryRunner = queryRunner;
+  }
   async create<T extends ShopEntity>(entities): Promise<Array<Promise<T>>> {
-    let connection = await handleConnection();
+    // let connection = await handleConnection();
     return entities.map(async (entity: T) => {
+      console.log(entity);
       try {
-        const repo = await connection.getRepository(this.c);
-        const created = await repo.create(entity as any);
-        await repo.save(created as any)
+        const repo = await this.queryRunner.connection.getRepository(this.c);
+        // const created = await repo.create(entity as any);
+        return await repo.save(entity as any)
       } catch (error) {
         await handleConnection();
       }
@@ -111,47 +127,45 @@ export class seedData1607894299583 implements MigrationInterface {
     const customer = new CustomerEntity()
     customer.firstName = firstName;
     customer.lastName = lastName;
-    console.log(customer);
-
     return customer;
   }
 
-  async createProduct() {
+  createProduct() {
     const product = new ProductEntity();
     product.productName = faker.commerce.productName();
     // 1/3 of products above 100
     product.cost = faker.random.number(2) == 0
       ? +faker.commerce.price(10, 99, 2)
       : +faker.commerce.price(1, 10, 2)
-    return await getRepository(ProductEntity).save(product);
+    return product;
 
   }
 
-  async createPurchase(context) {
-    const { productId, transactionId, quantity } = context;
+  createPurchase(context: PurchaseContext) {
+    const { product, transactionId, quantity } = context;
     const purchase = new PurchaseEntity();
-    // purchase.product = factory(ProductEntity)() as any;
-    purchase.productId = productId;
+    purchase.product = product;
+    purchase.productId = product.id;
     purchase.transactionId = transactionId;
     purchase.quantity = quantity;
-    return await getRepository(PurchaseEntity).save(purchase);
+    return purchase;
   }
 
-  async createTransaction(context) {
+  createTransaction(context: TransactionContext) {
     const { customerId, transactionId, total, rewardsPoints } = context;
     const transaction = new TransactionEntity();
     transaction.id = transactionId;
     transaction.customerId = customerId;
     transaction.total = total;
     transaction.rewardsPoints = rewardsPoints;
-    return await getRepository(TransactionEntity).save(transaction);
+    return transaction;
 
   }
 
-  looper(amount, fn) {
+  looper(amount, fn, context?) {
     const out = [];
     for (let i = 0; i < amount; i++) {
-      out.push(fn())
+      out.push(fn(context))
     }
     return out;
   }
@@ -178,15 +192,75 @@ export class seedData1607894299583 implements MigrationInterface {
     }
   }
 
+  calculateTransaction(purchases) {
+    const total: number = purchases.reduce((total, purchase) => total += purchase.product.cost * purchase.quantity, 0);
+    //   A customer receives 2 points for every dollar spent over $100 in each transaction, plus 1 point for every dollar spent over $50 in each transaction
+    // (e.g. a $120 purchase = 2x$20 + 1x$50 = 90 points).
+    const rewardsPoints =
+      total > 50 && total <= 100
+        ? (total - 50)
+        : total > 100
+          ? (50 + ((total - 100) * 2))
+          : 0
+      ;
+    return {
+      total: total,
+      rewardsPoints: rewardsPoints
+    }
+  }
+
   async up(queryRunner: QueryRunner): Promise<any> {
     const customerCount = 3;
-    const customerCreate = new SeedHandler<CustomerEntity>(CustomerEntity)
-    const customers = this.looper(customerCount, this.createCustomer)
-    console.log(customers);
-    return await customerCreate.create(customers);
+    const customerCreate = new SeedHandler<CustomerEntity>(CustomerEntity, queryRunner)
+    const customers: CustomerEntity[] = this.looper(customerCount, this.createCustomer);
+    // console.log(customers);
+    const customerPromises = await customerCreate.create(customers);
+    await Promise.all(customerPromises);
 
-    // return forEachPromise([...Array(customerCount).keys()], this.createCustomer);
+    const productCount = 3;
+    const productCreate = new SeedHandler<ProductEntity>(ProductEntity, queryRunner);
+    const products = this.looper(productCount, this.createProduct);
+    // console.log(products);
+    const productPromises = await productCreate.create(products);
+    await Promise.all(productPromises);
+    const createdProducts = await queryRunner.connection.getRepository(ProductEntity).find();
+    console.log(createdProducts);
+    
+    const debug = true 
+    if (debug) {
+      for (const customer of customers) {
+        const transactionId = Date.now().toString();
+        const purchaseCount = faker.random.number({ min: 1, max: 8 });
+        const purchaseCreate = new SeedHandler<PurchaseEntity>(PurchaseEntity, queryRunner);
+        const check = createdProducts.filter((p: ProductEntity) => p.id == faker.random.number({ min: 1, max: 3 }));
+        console.log(check);
+        
+        const product = createdProducts.filter((p: ProductEntity) => p.id == faker.random.number({ min: 1, max: 3 }))[0];
+        console.log(product);
+        const purchaseContext: PurchaseContext = {
+          product: product,
+          quantity: faker.random.number({ min: 1, max: 5 }),
+          transactionId: transactionId
+        };
+        const purchases = this.looper(purchaseCount, this.createPurchase, purchaseContext);
+        const transactionCreate = new SeedHandler<TransactionEntity>(TransactionEntity, queryRunner);
+        const transactionCount = 1;
+        const { total, rewardsPoints } = this.calculateTransaction(purchases);
+        const transactionContext: TransactionContext = {
+          transactionId: transactionId,
+          customerId: customer.id,
+          total: total,
+          rewardsPoints: rewardsPoints
+        };
+        const transactions = this.looper(transactionCount, this.createTransaction, transactionContext);
+        const transactionPromises = await transactionCreate.create(transactions);
+        await Promise.all(transactionPromises);
+        const purchasePromises = await purchaseCreate.create(purchases);
+        await Promise.all(purchasePromises);
+      }
+    }
 
+    return;
   }
 
 
