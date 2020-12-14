@@ -1,5 +1,5 @@
-import { CustomerEntity } from '../../api/entity/CustomerEntity'
 import { Factory, Seeder } from 'typeorm-seeding'
+import { CustomerEntity } from '../../api/entity/CustomerEntity'
 import { TransactionEntity } from '../../api/entity/TransactionEntity';
 import { ProductEntity } from '../../api/entity/ProductEntity';
 import { PurchaseEntity } from '../../api/entity/PurchaseEntity';

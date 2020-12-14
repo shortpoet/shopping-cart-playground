@@ -4,9 +4,23 @@ import { Customer } from "../../interfaces/Customer";
 import { Transaction } from "../../interfaces/Transaction";
 import { TransactionEntity } from "./TransactionEntity";
 
+// function createCustomer(ctor: CustomerConstructor): Customer {
+//   return new ctor();
+// }
+
+// export interface CustomerConstructor {
+//   new (): CustomerEntity
+// }
+
+
 @ObjectType()
 @Entity({ name: `customers`, schema: 'logistics' })
-export class CustomerEntity implements Customer {
+// export class CustomerEntity implements CustomerConstructor {
+export class CustomerEntity {
+  // constructor() {
+  //   return new CustomerEntity();
+  //   // createCustomer()
+  // }
 
   @Field(type => ID)
   @PrimaryGeneratedColumn()
