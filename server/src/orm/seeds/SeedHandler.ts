@@ -11,6 +11,7 @@ import * as fs from 'fs';
 import { EntityNames } from '../../interfaces/EntityNames';
 import { customerQuery } from '../../api/resolvers/customer.resolver'
 import { transactionQuery } from '../../api/resolvers/transaction.resolver';
+import { chalkLog } from '../../utils/chalkLog';
 function forEachPromise(items, fn) {
   return items.reduce((promise, item) => promise().then(() => fn(item)), Promise.resolve);
 }
@@ -118,6 +119,7 @@ export class SeedHandler {
         await this.clean(entity.name, hasIdentity[count]);
         count++;
       }
+      chalkLog('green', 'entites cleaned')
     } catch (error) {
       throw new Error(`ERROR: Cleaning test db: ${error}`);
     }
@@ -145,6 +147,7 @@ export class SeedHandler {
             .execute();
         }
       }
+      chalkLog('green', 'entites loaded')
     } catch (error) {
       throw new Error(`ERROR [SeedHandler.loadAll()]: Loading fixtures on test db: ${error}`);
     }

@@ -27,6 +27,7 @@ type PurchaseEntity {
 
 type Query {
   customers: [CustomerEntity!]
+  transactions: [TransactionEntity!]
 }
 
 type TransactionEntity {

@@ -18,7 +18,6 @@ beforeEach(async () => {
 });
 
 afterEach(async () => {
-  await connection.close();
   await seedHandler.closeConnection();
 });
 
@@ -57,6 +56,6 @@ describe('transaction.resolvers.ts', () => {
     `
     });
     
-    expect(actual.data.transactions).toEqual(transactionQuery);
+    await expect(actual.data.transactions).toEqual(transactionQuery);
   });
 });
