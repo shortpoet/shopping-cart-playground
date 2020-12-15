@@ -1,4 +1,6 @@
 console.log("$# ORM CONFIG @7");
+require("dotenv").config();
+
 console.log("$# DOCKER @7");
 console.log(process.env.DOCKER);
 console.log("$# PROVIDER @7");

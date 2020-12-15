@@ -7,11 +7,13 @@ import { loggingMiddleware } from './middleware/loggingMiddleware';
 import { redisMiddleware } from './middleware/redisMiddleware';
 import { TransactionEntity } from './api/entity/TransactionEntity';
 import { TransactionResolver } from './api/resolvers/transaction.resolver';
+import { seedMiddleware } from './middleware/seedMiddleware';
+import { SeedHandler } from './orm/seeds/SeedHandler';
 // const util = require('util');
 // import util from 'util';
 
 
-// const config = require('../ormconfig.js');
+const config = require('../ormconfig.js');
 
 // export default class Application {
 //   app: Express
@@ -21,9 +23,10 @@ import { TransactionResolver } from './api/resolvers/transaction.resolver';
   // console.log(config);
   // could insert config as options into createConnection 
   // if need to read from.env to have node modules up a directory 
-  const connection = await createConnection();
-  const context = await getConnection().getRepository(TransactionEntity).find()
-  console.log(context);
+  const connection = await createConnection(config);
+  const context = await getConnection();
+  const tranactionContext = await context.getRepository(TransactionEntity).find()
+  // console.log(tranactionContext);
   
   if (connection) {
     // console.log(util.inspect(connection.options, false, null, true /* enable colors */));
@@ -38,7 +41,15 @@ import { TransactionResolver } from './api/resolvers/transaction.resolver';
 
     const schema = await generateSchema(TransactionResolver);
 
-    app.use('/graphql', graphqlHTTP((req) => ({
+    app.use(seedMiddleware);
+
+    // if ((await context.getRepository(TransactionEntity).find()).length == 0) {
+    //   const seedHandler = new SeedHandler(getConnection().createQueryRunner('master'));
+    //   await seedHandler.seedData()
+    // }
+
+
+    app.use('/graphql', seedMiddleware, graphqlHTTP((req) => ({
       schema,
       graphiql: true
     })))

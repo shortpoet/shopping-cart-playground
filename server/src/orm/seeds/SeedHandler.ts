@@ -86,6 +86,52 @@ export class SeedHandler {
   public constructor(queryRunner) {
     this.queryRunner = queryRunner;
   }
+  looper = (amount, fn, context?) => {
+    const out = [];
+    for (let i = 0; i < amount; i++) {
+      out.push(fn(context))
+    }
+    return out;
+  }
+  findAll = async () => {
+
+  }
+  getEntities = async () => {
+    const entities = [];
+    (await (await getConnection()).entityMetadatas).forEach(
+      x => entities.push({ name: x.name, tableName: x.tableName })
+    );
+    return entities;
+  }
+  clean = async (name, hasIdentity = true) => {
+    
+    const entity = await (await this.getEntities()).filter(e => e.name == name)[0];
+    try {
+      const repository = await getRepository(entity.name);
+      await repository.query(`DELETE FROM ${entity.tableName};`);
+      if (hasIdentity) await repository.query(`DBCC CHECKIDENT ('${entity.tableName}', RESEED, 0);`);
+    } catch (error) {
+      throw new Error(`ERROR: Cleaning test db: ${error}`);
+    }
+
+  }
+  cleanAll = async (entities, hasIdentity, order?) => {
+    console.log(entities);
+    let count = 0;
+    if (order) {
+      entities = entities.map((item, i) => entities.filter((thisItem => thisItem.name == order[i]))[0])
+    }
+    console.log(entities);
+    
+    try {
+      for (const entity of entities) {
+        await this.clean(entity.name, hasIdentity[count]);
+        count++;
+      }
+    } catch (error) {
+      throw new Error(`ERROR: Cleaning test db: ${error}`);
+    }
+  }
 
   /**
    * Insert the data from the src/test/fixtures folder
@@ -155,48 +201,6 @@ export class SeedHandler {
     transaction.total = total;
     transaction.rewardsPoints = rewardsPoints;
     return transaction;
-  }
-  looper = (amount, fn, context?) => {
-    const out = [];
-    for (let i = 0; i < amount; i++) {
-      out.push(fn(context))
-    }
-    return out;
-  }
-  findAll = async () => {
-
-  }
-  getEntities = async () => {
-    const entities = [];
-    (await (await getConnection()).entityMetadatas).forEach(
-      x => entities.push({ name: x.name, tableName: x.tableName })
-    );
-    return entities;
-  }
-  clean = async (name, hasIdentity = true) => {
-    const entity = await (await this.getEntities()).filter(e => e.name == name)[0];
-    try {
-      const repository = await getRepository(entity.name);
-      await repository.query(`DELETE FROM ${entity.tableName};`);
-      if (hasIdentity) await repository.query(`DBCC CHECKIDENT ('${entity.tableName}', RESEED, 0);`);
-    } catch (error) {
-      throw new Error(`ERROR: Cleaning test db: ${error}`);
-    }
-
-  }
-  cleanAll = async (entities, order?) => {
-    if (order) {
-      entities = entities.map((item, i) => entities.filter((thisItem => thisItem.name == order[i]))[0])
-    }
-    try {
-      for (const entity of entities) {
-        const repository = await getRepository(entity.name);
-        await repository.query(`DELETE FROM ${entity.tableName};`);
-        await repository.query(`DBCC CHECKIDENT ('${entity.tableName}', RESEED, 0);`);
-      }
-    } catch (error) {
-      throw new Error(`ERROR: Cleaning test db: ${error}`);
-    }
   }
   calculateTransaction = (purchases) => {
     const total: number = purchases.reduce((total, purchase) => total += purchase.product.cost * purchase.quantity, 0);
@@ -273,15 +277,8 @@ export class SeedHandler {
     }
   }
   seedData = async () => {
-
     await this.seedCustomers();
-    this.savedCustomers = await this.queryRunner.connection.getRepository(CustomerEntity).find();
-    console.log(this.savedCustomers);
-
     await this.seedProducts();
-    this.savedProducts = await this.queryRunner.connection.getRepository(ProductEntity).find();
-    console.log(this.savedProducts);
-
-    await this.seedTransactions()
+    await this.seedTransactions();
   }
 }
