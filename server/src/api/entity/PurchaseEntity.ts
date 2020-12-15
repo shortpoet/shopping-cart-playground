@@ -11,7 +11,7 @@ import { ProductEntity } from "./ProductEntity";
 @Entity({ name: `purchases`, schema: 'logistics' })
 export class PurchaseEntity implements Purchase {
 
-  @Field(type => ID)
+  @Field(type => Int)
   @PrimaryGeneratedColumn()
   id: number;
   

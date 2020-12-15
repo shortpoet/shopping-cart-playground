@@ -17,7 +17,7 @@ type ProductEntity {
 }
 
 type PurchaseEntity {
-  id: ID!
+  id: Int!
   product: ProductEntity!
   productId: Int!
   quantity: Int!
@@ -26,7 +26,7 @@ type PurchaseEntity {
 }
 
 type Query {
-  transactions: [TransactionEntity!]
+  customers: [CustomerEntity!]
 }
 
 type TransactionEntity {

@@ -1,4 +1,4 @@
-import { chalkLog } from "../../../src/utils/chalkLog";
+import { chalkLog } from "../../utils/chalkLog";
 import { createConnection } from "typeorm";
 import { SeedHandler } from "./SeedHandler";
 const config = require('../../../ormconfig.js');
@@ -6,7 +6,7 @@ const config = require('../../../ormconfig.js');
   try {
     const connection = await createConnection(config);
     const seedHandler = new SeedHandler(connection.createQueryRunner('master'));
-    await seedHandler.seedData();
+    await seedHandler.loadAll(await seedHandler.getEntities());
     connection.close();
     chalkLog("magenta", "...entities seeded");
   } catch (error) {

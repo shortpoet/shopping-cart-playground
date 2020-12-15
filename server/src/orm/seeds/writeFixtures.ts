@@ -6,7 +6,6 @@ const config = require('../../../ormconfig.js');
   const seedHandler = new SeedHandler(connection.createQueryRunner('master'));
   const entities = await seedHandler.getEntities();
   console.log(entities);
-  
   await seedHandler.writeAll(entities);
   connection.close()
 })();

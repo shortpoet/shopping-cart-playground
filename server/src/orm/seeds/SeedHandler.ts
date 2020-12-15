@@ -128,7 +128,9 @@ export class SeedHandler {
   loadAll = async (entities) => {
     try {
       let connection = await this.queryRunner.connection;
-
+      let count = 0;
+      entities = this.reOrder(entities, ['PurchaseEntity', 'TransactionEntity', 'ProductEntity', 'CustomerEntity'].reverse())
+  
       for (const entity of entities) {
         const repository = await connection.getRepository(entity.name);
         const fixtureFile = path.join(__dirname, `../../../tests/fixtures/${entity.name}.json`);
@@ -161,6 +163,7 @@ export class SeedHandler {
     ]    
     try {
       let connection = await this.queryRunner.connection;
+
       for (const entity of entities) {
         const repository = await connection.getRepository(entity.name);
         const fixtureFile = path.join(__dirname, `../../../tests/fixtures/${entity.name}.json`);

@@ -1,0 +1,98 @@
+[
+  {
+    "id": "1608059748380",
+    "customerId": 1,
+    "total": 109,
+    "rewardsPoints": 68,
+    "purchases": [
+      {
+        "id": 1,
+        "productId": 13,
+        "transactionId": "1608059748380",
+        "quantity": 1
+      },
+      {
+        "id": 2,
+        "productId": 17,
+        "transactionId": "1608059748380",
+        "quantity": 1
+      },
+      {
+        "id": 3,
+        "productId": 7,
+        "transactionId": "1608059748380",
+        "quantity": 1
+      },
+      {
+        "id": 4,
+        "productId": 26,
+        "transactionId": "1608059748380",
+        "quantity": 1
+      },
+      {
+        "id": 5,
+        "productId": 16,
+        "transactionId": "1608059748380",
+        "quantity": 1
+      },
+      {
+        "id": 6,
+        "productId": 8,
+        "transactionId": "1608059748380",
+        "quantity": 1
+      },
+      {
+        "id": 7,
+        "productId": 7,
+        "transactionId": "1608059748380",
+        "quantity": 1
+      },
+      {
+        "id": 8,
+        "productId": 23,
+        "transactionId": "1608059748380",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "id": "1608059748431",
+    "customerId": 2,
+    "total": 14,
+    "rewardsPoints": 0,
+    "purchases": [
+      {
+        "id": 9,
+        "productId": 5,
+        "transactionId": "1608059748431",
+        "quantity": 2
+      }
+    ]
+  },
+  {
+    "id": "1608059748477",
+    "customerId": 3,
+    "total": 51,
+    "rewardsPoints": 1,
+    "purchases": [
+      {
+        "id": 10,
+        "productId": 12,
+        "transactionId": "1608059748477",
+        "quantity": 3
+      },
+      {
+        "id": 11,
+        "productId": 29,
+        "transactionId": "1608059748477",
+        "quantity": 3
+      },
+      {
+        "id": 12,
+        "productId": 8,
+        "transactionId": "1608059748477",
+        "quantity": 3
+      }
+    ]
+  }
+]
