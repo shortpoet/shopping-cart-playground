@@ -1,4 +1,5 @@
 import { Connection, ConnectionOptions, createConnection } from "typeorm"
+const config = require('../../../ormconfig.js');
 
 async function createDbConnection (options: ConnectionOptions): Promise<Connection> {
   try {
@@ -11,4 +12,21 @@ async function createDbConnection (options: ConnectionOptions): Promise<Connecti
   }
 }
 
-export {createDbConnection}
+export { createDbConnection }
+
+const handleConnection = async () => {
+  let connection = await createDbConnection(config);
+  // connection.connect();
+  if (connection == undefined) {
+    try {
+      connection = await createDbConnection(config);
+      // connection.connect();
+    } catch (_) { }
+    if (connection == undefined) {
+      connection = await handleConnection();
+      // connection.connect();
+    }
+
+  }
+  return connection
+}

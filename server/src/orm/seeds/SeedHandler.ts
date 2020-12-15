@@ -3,12 +3,11 @@ import { TransactionEntity } from '../../api/entity/TransactionEntity';
 import { ProductEntity } from '../../api/entity/ProductEntity';
 import { PurchaseEntity } from '../../api/entity/PurchaseEntity';
 import { keyword } from "chalk";
-import faker from "faker";
+import * as faker from "faker";
 import { createConnection, EntityTarget, getConnection, getRepository, MigrationInterface, ObjectType, QueryRunner, Repository } from "typeorm";
 import { createDbConnection } from './dbConnect';
-import path from 'path';
-import fs from 'fs';
-const config = require('../../../ormconfig.js');
+import * as path from 'path';
+import * as fs from 'fs';
 
 function forEachPromise(items, fn) {
   return items.reduce((promise, item) => promise().then(() => fn(item)), Promise.resolve);
@@ -28,22 +27,6 @@ interface GenericInterface<T> {
 // interface iShopEntity {
 //   entity: ObjectType<PurchaseEntity | ProductEntity | TransactionEntity | CustomerEntity>;
 // }
-const handleConnection = async () => {
-  let connection = await createDbConnection(config);
-  // connection.connect();
-  if (connection == undefined) {
-    try {
-      connection = await createDbConnection(config);
-      // connection.connect();
-    } catch (_) { }
-    if (connection == undefined) {
-      connection = await createDbConnection(config);
-      // connection.connect();
-    }
-
-  }
-  return connection
-}
 
 interface PurchaseContext {
   // product: ProductEntity;
@@ -136,7 +119,7 @@ export class SeedHandler {
   /**
    * Insert the data from the src/test/fixtures folder
    */
-  async loadAll(entities) {
+  loadAll = async (entities) => {
     try {
       let connection = await this.queryRunner.connection;
 
@@ -153,7 +136,23 @@ export class SeedHandler {
         }
       }
     } catch (error) {
-      throw new Error(`ERROR [TestUtils.loadAll()]: Loading fixtures on test db: ${error}`);
+      throw new Error(`ERROR [SeedHandler.loadAll()]: Loading fixtures on test db: ${error}`);
+    }
+  }
+
+  writeAll = async (entities) => {
+    try {
+      let connection = await this.queryRunner.connection;
+      for (const entity of entities) {
+        const repository = await connection.getRepository(entity.name);
+        const fixtureFile = path.join(__dirname, `../../../tests/fixtures/${entity.name}.json`);
+        if (!fs.existsSync(fixtureFile)) {
+          const items = JSON.stringify(await repository.find());
+          fs.writeFileSync(fixtureFile, items);
+        }
+      }
+    } catch (error) {
+      throw new Error(`ERROR [SeedHandler.writeAll()]: Writing fixtures from test db: ${error}`);
     }
   }
 
