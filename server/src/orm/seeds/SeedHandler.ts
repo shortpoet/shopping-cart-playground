@@ -106,12 +106,12 @@ export class SeedHandler {
     }
 
   }
+  reOrder = (entities, order) => entities = entities.map((item, i) => entities.filter((thisItem => thisItem.name == order[i]))[0]);
+  
   cleanAll = async (entities, hasIdentity, order?) => {
-    console.log(entities);
-
     let count = 0;
     if (order) {
-      entities = entities.map((item, i) => entities.filter((thisItem => thisItem.name == order[i]))[0])
+      entities = this.reOrder(entities, order)
     }
     try {
       for (const entity of entities) {
@@ -149,7 +149,7 @@ export class SeedHandler {
   }
 
   writeAll = async (entities) => {
-    const queryies = [
+    const queries = [
       {
         entity: EntityNames.CustomerEntity,
         query: customerQuery,
@@ -166,16 +166,16 @@ export class SeedHandler {
         const fixtureFile = path.join(__dirname, `../../../tests/fixtures/${entity.name}.json`);
         if (!fs.existsSync(fixtureFile)) {
           const items = JSON.stringify(
-            await repository
-              .query(`SELECT * FROM ${entity.tableName}`),
+            await repository.find(),
+            // await repository.query(`SELECT * FROM ${entity.tableName}`),
             undefined,
             2
-          );
+          )
           fs.writeFileSync(fixtureFile, items);
         }
       }
-      for (const query of queryies) {
-        const repository = await connection.getRepository(query.entity);
+      for (const query of queries) {
+        // const repository = await connection.getRepository(query.entity);
         const fixtureFile = path.join(__dirname, `../../../tests/fixtures/${query.query.name}.json`);
         if (!fs.existsSync(fixtureFile)) {
           const items = JSON.stringify(

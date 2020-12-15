@@ -22,7 +22,7 @@ export class CustomerResolver {
     const customersPromise = getRepository(CustomerEntity).find();
     // const customers = await customersPromise;
     chalkLog('magentaBright', '#### database fetch ####');
-    const customers = customerQuery(CustomerEntity)
+    const customers = await customerQuery(CustomerEntity)
 
     if (!customers) {
       throw new Error(`No customers`);

@@ -20,7 +20,7 @@ export class PurchaseEntity implements Purchase {
   productId: number;
   @Field(type => ProductEntity)
   @OneToOne(type => ProductEntity, productEntity => productEntity, {
-    eager: true
+    // eager: true
   })
   @JoinColumn({ name: 'product_id' })
   product: Product;

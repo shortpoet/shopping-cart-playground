@@ -22,7 +22,7 @@ export class TransactionResolver {
   async transactions(): Promise<Transaction[]> {
     const transactionsPromise = getRepository(TransactionEntity).find();
     // const transactions = await transactionsPromise;
-    const transactions = transactionQuery(TransactionEntity);
+    const transactions = await transactionQuery(TransactionEntity);
     console.log(transactions);
     chalkLog('magentaBright', '#### database fetch ####');
     if (!transactions) {

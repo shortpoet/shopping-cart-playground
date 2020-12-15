@@ -40,7 +40,6 @@
     "dev": "nodemon",
     "test": "jest --watch",
     "watch": "jest  --watch --coverage",
-    "seed:fixtures": "node --require ts-node/register ./src/orm/seeds/writeAll.ts",
     "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js",
     "migrate": "ts-node ./node_modules/typeorm/cli.js migrate",
     "migrate:create": "ts-node ./node_modules/typeorm/cli.js migration:create -n",
@@ -48,7 +47,9 @@
     "migrate:revert": "ts-node ./node_modules/typeorm/cli.js migration:revert",
     "migrate:generate": "ts-node ./node_modules/typeorm/cli.js migration:generate -n",
     "seed:config": "ts-node ./node_modules/typeorm-seeding/dist/cli.js config",
-    "seed:run": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed",
+    "seed:run": "node --require ts-node/register ./src/orm/seeds/run.ts",
+    "seed:clean": "node --require ts-node/register ./src/orm/seeds/cleanAll.ts && rm ./tests/fixtures/*",
+    "seed:fixtures": "node --require ts-node/register ./src/orm/seeds/writeAll.ts",
     "seed:test:run": "ts-node --inspect ./node_modules/typeorm-seeding/dist/cli.js seed"
   }
 }
