@@ -12,7 +12,7 @@ import { Product } from "../../interfaces/Product";
 @Entity({ name: `products`, schema: 'logistics' })
 export class ProductEntity implements Product {
   
-  @Field(type => ID)
+  @Field(type => Int)
   @PrimaryGeneratedColumn()
   id: number;
   

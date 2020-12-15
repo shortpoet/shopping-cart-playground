@@ -5,18 +5,30 @@ import { chalkLog } from "../../utils/chalkLog";
 import { Transaction } from "../../interfaces/Transaction";
 import { TransactionEntity } from "../entity/TransactionEntity";
 
+export async function transactionQuery (entity): Promise<Transaction[]> {
+  return await getRepository(entity)
+    .createQueryBuilder('transactions')
+    .innerJoinAndSelect('transactions.customer', 'customer')
+    .innerJoinAndSelect('transactions.purchases', 'purchases')
+    .innerJoinAndSelect('purchases.product', 'product')
+    .getMany() as Transaction[]
+}
+
+
 @Resolver(of => TransactionEntity)
 export class TransactionResolver {
 
   @Query(returns => [TransactionEntity], { nullable: true })
   async transactions(): Promise<Transaction[]> {
     const transactionsPromise = getRepository(TransactionEntity).find();
-    const transactions = await transactionsPromise;
+    // const transactions = await transactionsPromise;
+    const transactions = transactionQuery(TransactionEntity);
+    console.log(transactions);
     chalkLog('magentaBright', '#### database fetch ####');
     if (!transactions) {
       throw new Error(`No transactions`);
     }
-    return transactionsPromise;
+    return transactions;
   }
 
 }

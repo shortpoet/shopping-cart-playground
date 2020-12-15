@@ -1,1 +1,17 @@
-[{"id":1,"firstName":"Braxton","lastName":"Shanahan"},{"id":2,"firstName":"Fred","lastName":"Schumm"},{"id":3,"firstName":"Laverna","lastName":"Morar"}]
+[
+  {
+    "id": 1,
+    "first_name": "Elyssa",
+    "last_name": "Ruecker"
+  },
+  {
+    "id": 2,
+    "first_name": "Alena",
+    "last_name": "Howell"
+  },
+  {
+    "id": 3,
+    "first_name": "Colleen",
+    "last_name": "Mayer"
+  }
+]

@@ -5,14 +5,14 @@
 
 type CustomerEntity {
   firstName: String!
-  id: ID!
+  id: Int!
   lastName: String!
   transactions: [TransactionEntity!]!
 }
 
 type ProductEntity {
   cost: Int!
-  id: ID!
+  id: Int!
   productName: String!
 }
 
@@ -26,6 +26,7 @@ type PurchaseEntity {
 }
 
 type Query {
+  customers: [CustomerEntity!]
   transactions: [TransactionEntity!]
 }
 

@@ -8,7 +8,9 @@ import { createConnection, EntityTarget, getConnection, getRepository, Migration
 import { createDbConnection } from './dbConnect';
 import * as path from 'path';
 import * as fs from 'fs';
-
+import { EntityNames } from '../../interfaces/EntityNames';
+import { customerQuery } from '../../api/resolvers/customer.resolver'
+import { transactionQuery } from '../../api/resolvers/transaction.resolver';
 function forEachPromise(items, fn) {
   return items.reduce((promise, item) => promise().then(() => fn(item)), Promise.resolve);
 }
@@ -69,6 +71,12 @@ export class SeedHandler {
   public constructor(queryRunner) {
     this.queryRunner = queryRunner;
   }
+  closeConnection = async () => {
+    const connection = (await this.queryRunner.connection);
+    if (connection.isConnected) {
+      await (await this.queryRunner.connection).close();
+    }
+  }
   looper = (amount, fn, context?) => {
     const out = [];
     for (let i = 0; i < amount; i++) {
@@ -87,7 +95,7 @@ export class SeedHandler {
     return entities;
   }
   clean = async (name, hasIdentity = true) => {
-    
+
     const entity = await (await this.getEntities()).filter(e => e.name == name)[0];
     try {
       const repository = await getRepository(entity.name);
@@ -100,12 +108,11 @@ export class SeedHandler {
   }
   cleanAll = async (entities, hasIdentity, order?) => {
     console.log(entities);
+
     let count = 0;
     if (order) {
       entities = entities.map((item, i) => entities.filter((thisItem => thisItem.name == order[i]))[0])
     }
-    console.log(entities);
-    
     try {
       for (const entity of entities) {
         await this.clean(entity.name, hasIdentity[count]);
@@ -115,7 +122,6 @@ export class SeedHandler {
       throw new Error(`ERROR: Cleaning test db: ${error}`);
     }
   }
-
   /**
    * Insert the data from the src/test/fixtures folder
    */
@@ -125,9 +131,11 @@ export class SeedHandler {
 
       for (const entity of entities) {
         const repository = await connection.getRepository(entity.name);
-        const fixtureFile = path.join(__dirname, `../test/fixtures/${entity.name}.json`);
+        const fixtureFile = path.join(__dirname, `../../../tests/fixtures/${entity.name}.json`);
         if (fs.existsSync(fixtureFile)) {
           const items = JSON.parse(fs.readFileSync(fixtureFile, 'utf8'));
+          console.log(items);
+
           await repository
             .createQueryBuilder(entity.name)
             .insert()
@@ -141,13 +149,40 @@ export class SeedHandler {
   }
 
   writeAll = async (entities) => {
+    const queryies = [
+      {
+        entity: EntityNames.CustomerEntity,
+        query: customerQuery,
+      },
+      {
+        entity: EntityNames.TransactionEntity,
+        query: transactionQuery,
+      }
+    ]    
     try {
       let connection = await this.queryRunner.connection;
       for (const entity of entities) {
         const repository = await connection.getRepository(entity.name);
         const fixtureFile = path.join(__dirname, `../../../tests/fixtures/${entity.name}.json`);
         if (!fs.existsSync(fixtureFile)) {
-          const items = JSON.stringify(await repository.find());
+          const items = JSON.stringify(
+            await repository
+              .query(`SELECT * FROM ${entity.tableName}`),
+            undefined,
+            2
+          );
+          fs.writeFileSync(fixtureFile, items);
+        }
+      }
+      for (const query of queryies) {
+        const repository = await connection.getRepository(query.entity);
+        const fixtureFile = path.join(__dirname, `../../../tests/fixtures/${query.query.name}.json`);
+        if (!fs.existsSync(fixtureFile)) {
+          const items = JSON.stringify(
+            await query.query(query.entity),
+            undefined,
+            2
+          );
           fs.writeFileSync(fixtureFile, items);
         }
       }
@@ -155,7 +190,18 @@ export class SeedHandler {
       throw new Error(`ERROR [SeedHandler.writeAll()]: Writing fixtures from test db: ${error}`);
     }
   }
+  /**
+   * Cleans the database and reloads the entries
+   */
+  async reloadFixtures() {
+    const entities = await this.getEntities();
+    console.log(entities);
 
+    const hasIdentity = [true, false, true, true]
+    const order = ['PurchaseEntity', 'TransactionEntity', 'ProductEntity', 'CustomerEntity']
+    await this.cleanAll(entities, hasIdentity, order);
+    await this.loadAll(entities);
+  }
   createCustomer = () => {
     const gender = faker.random.number(1)
     const firstName = faker.name.firstName(gender)

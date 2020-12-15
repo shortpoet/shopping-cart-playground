@@ -1,5 +1,5 @@
 import {Entity, PrimaryGeneratedColumn, Column, OneToMany} from "typeorm";
-import { ObjectType, Field, ID, Arg } from "type-graphql";
+import { ObjectType, Field, ID, Int } from "type-graphql";
 import { Customer } from "../../interfaces/Customer";
 import { Transaction } from "../../interfaces/Transaction";
 import { TransactionEntity } from "./TransactionEntity";
@@ -22,7 +22,7 @@ export class CustomerEntity {
   //   // createCustomer()
   // }
 
-  @Field(type => ID)
+  @Field(type => Int)
   @PrimaryGeneratedColumn()
   id: number;
   

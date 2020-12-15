@@ -6,9 +6,8 @@ import { EntityManager, getConnection, getRepository, QueryRunner } from 'typeor
 import { chalkLog } from '../utils/chalkLog';
 
 export const seedMiddleware = async (req, res, next) => {
-  chalkLog('magenta', '#### seed middleware ####')
-  chalkLog('green', `'ip:', ${req.ip}`)
-  console.log('purple', '#### seed middleware ####')
+  // chalkLog('magenta', '#### seed middleware ####')
+  // chalkLog('green', `'ip:', ${req.ip}`)
   let isSeedingComplete;
   // next()
   if (await isSeedingComplete) {

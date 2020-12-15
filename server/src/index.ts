@@ -9,6 +9,7 @@ import { TransactionEntity } from './api/entity/TransactionEntity';
 import { TransactionResolver } from './api/resolvers/transaction.resolver';
 import { seedMiddleware } from './middleware/seedMiddleware';
 import { SeedHandler } from './orm/seeds/SeedHandler';
+import { CustomerResolver } from './api/resolvers/customer.resolver';
 // const util = require('util');
 // import util from 'util';
 
@@ -26,7 +27,7 @@ const config = require('../ormconfig.js');
   const connection = await createConnection(config);
   const context = await getConnection();
   const tranactionContext = await context.getRepository(TransactionEntity).find()
-  // console.log(tranactionContext);
+  console.log(tranactionContext);
   
   if (connection) {
     // console.log(util.inspect(connection.options, false, null, true /* enable colors */));
@@ -39,7 +40,7 @@ const config = require('../ormconfig.js');
 
     app.use(loggingMiddleware);
 
-    const schema = await generateSchema(TransactionResolver);
+    const schema = await generateSchema(TransactionResolver, CustomerResolver);
 
     app.use(seedMiddleware);
 
