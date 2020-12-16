@@ -76,7 +76,9 @@ module.exports = isProduction
     devServer: {
       contentBase: path.join(__dirname, "dist"),
       compress: true,
-      port: process.env.PORT
+      port: process.env.PORT,
+      hot: true,
+      inline: true
     }
   }
 ;
