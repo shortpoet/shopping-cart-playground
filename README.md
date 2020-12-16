@@ -94,6 +94,21 @@ yarn add --dev typeorm reflect-metadata @types/node mssql ts-jest @types/jest ex
 yarn add --dev mssql
 ```
 
+## client setup
+
+```bash
+mkdir client && mkdir client/{src,dist} && cd server
+yarn init
+yarn add --dev webpack webpack-cli react react-dom @types/react @types/react-dom typescript ts-loader source-map-loader chalk
+tsc --init
+touch {server,webpack.config}.js
+mkdir src/app && mkdir src/app/components
+touch src/app/{App,index}.tsx
+touch src/app/components/StoreFront.tsx
+mkdir public && touch public/index.html
+```
+
+
 ## azure
 
 - [container instances tutorial](https://docs.microsoft.com/en-us/azure/container-instances/container-instances-tutorial-prepare-acr)
