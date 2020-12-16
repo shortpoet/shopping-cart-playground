@@ -46,4 +46,4 @@ Background colors
 
 */
 
-export const chalkLog = (color, message) => console.log(chalk[`${color}`](`${inspect(message)}`))
+export function chalkLog(color, message){ console.log(chalk[`${color}`](`${inspect(message)}`))}

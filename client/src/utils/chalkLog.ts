@@ -1,49 +1,49 @@
-// const chalk = require('chalk')
-import chalk, { Chalk } from 'chalk';
-import { inspect } from 'util'
 
-// const _log  = () => Function.prototype.bind.call(console.log, console, 'LOG_ALIAS')
+const inspect = require('util').inspect;
+import chalk = require('chalk');
 
 /*
 https://github.com/chalk/chalk
 Colors
 
-    black
-    red
-    green
-    yellow
-    blue
-    magenta
-    cyan
-    white
-    blackBright (alias: gray, grey)
-    redBright
-    greenBright
-    yellowBright
-    blueBright
-    magentaBright
-    cyanBright
-    whiteBright
+  black
+  red
+  green
+  yellow
+  blue
+  magenta
+  cyan
+  white
+  blackBright (alias: gray, grey)
+  redBright
+  greenBright
+  yellowBright
+  blueBright
+  magentaBright
+  cyanBright
+  whiteBright
 
 Background colors
 
-    bgBlack
-    bgRed
-    bgGreen
-    bgYellow
-    bgBlue
-    bgMagenta
-    bgCyan
-    bgWhite
-    bgBlackBright (alias: bgGray, bgGrey)
-    bgRedBright
-    bgGreenBright
-    bgYellowBright
-    bgBlueBright
-    bgMagentaBright
-    bgCyanBright
-    bgWhiteBright
+  bgBlack
+  bgRed
+  bgGreen
+  bgYellow
+  bgBlue
+  bgMagenta
+  bgCyan
+  bgWhite
+  bgBlackBright (alias: bgGray, bgGrey)
+  bgRedBright
+  bgGreenBright
+  bgYellowBright
+  bgBlueBright
+  bgMagentaBright
+  bgCyanBright
+  bgWhiteBright
 
 */
 
-export const chalkLog = (chalkColor: Chalk, message: string) => console.log(chalkColor(`${inspect(message)}`))
+export function chalkLog(chalkColor: chalk.Chalk, message: string) {
+  console.log(chalkColor(`${inspect(message)}`))
+}
