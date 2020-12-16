@@ -1,4 +1,6 @@
-const path = require('path');
+const path = require('path'),
+  webpack = require('webpack'),
+  HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const isProduction = typeof NODE_ENV !== 'undefined' && NODE_ENV === 'production';
 const mode = isProduction ? 'production' : 'development';
@@ -14,13 +16,13 @@ module.exports = [
       path: path.resolve(__dirname, 'dist'),
       filename: 'js/[name].bundle.js'
     },
-    target: 'node',
+    target: 'web',
     mode,
     devtool,
     module: {
       rules: [
         {
-          test: /\.(ts|tsx)$/,
+          test: /\.(ts|tsx)?$/,
           use: 'ts-loader',
           exclude: /node_modules/
         },
@@ -35,37 +37,8 @@ module.exports = [
       __filename: false,
     },
     plugins: [
-      new HtmlWebpackPlugin({ template: path.resolve(__dirname, 'src', 'app', 'index.html') }),
+      new HtmlWebpackPlugin({ template: path.resolve(__dirname, 'public', 'index.html') }),
       new webpack.HotModuleReplacementPlugin()
     ]
-  },
-
-  {
-    // prod
-    entry: './src/client.ts',
-    target: 'web',
-    mode,
-    devtool,
-    module: {
-      rules: [
-        {
-          test: /\.tsx?$/,
-          use: 'ts-loader',
-          exclude: /node_modules/,
-          options: {
-            compilerOptions: {
-              "sourceMap": !isProduction,
-            }
-          }
-        }
-      ]
-    },
-    resolve: {
-      extensions: ['.js', '.jsx', '.json', '.ts', '.tsx']
-    },
-    output: {
-      filename: 'client.js',
-      path: path.join(__dirname, 'dist', 'public')
-    }
   }
 ];
