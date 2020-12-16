@@ -22,7 +22,6 @@ SET @pass = '$(MSSQL_PASSWORD)';
 DECLARE @cmd nvarchar(max);
 SET @cmd = 
 'BEGIN
-	CREATE LOGIN '+ @user + ' WITH PASSWORD=N''' + @pass + '''
 	
 	CREATE USER ' + @user + ' FOR LOGIN ' + @user + ' WITH DEFAULT_SCHEMA=' + @defaultSchema + '
 	

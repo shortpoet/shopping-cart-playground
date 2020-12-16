@@ -15,6 +15,7 @@ import { chalkLog } from '../../utils/chalkLog';
 function forEachPromise(items, fn) {
   return items.reduce((promise, item) => promise().then(() => fn(item)), Promise.resolve);
 }
+const flushPromises = () => new Promise((resolve)=> setImmediate(resolve));
 
 type ShopEntity = PurchaseEntity | ProductEntity | TransactionEntity | CustomerEntity
 
@@ -51,7 +52,7 @@ class EntityFactory<T> {
   async create<T extends ShopEntity>(entities): Promise<Array<Promise<T>>> {
     let connection = await this.queryRunner.connection;
     return entities.map(async (entity: T) => {
-      console.log(entity);
+      // console.log(entity);
       try {
         // const connection = await this.queryRunner.connect();
         // console.log(connection);
@@ -90,7 +91,7 @@ export class SeedHandler {
   }
   getEntities = async () => {
     const entities = [];
-    (await (await getConnection()).entityMetadatas).forEach(
+    (await (await this.queryRunner.connection).entityMetadatas).forEach(
       x => entities.push({ name: x.name, tableName: x.tableName })
     );
     return entities;
@@ -136,9 +137,10 @@ export class SeedHandler {
       for (const entity of entities) {
         const repository = await connection.getRepository(entity.name);
         const fixtureFile = path.join(__dirname, `../../../tests/fixtures/${entity.name}.json`);
+        chalkLog('blueBright', `count of ${entity.name} ${(await repository.find()).length}`)
         if (fs.existsSync(fixtureFile)) {
           const items = JSON.parse(fs.readFileSync(fixtureFile, 'utf8'));
-          console.log(items);
+          // console.log(items);
 
           await repository
             .createQueryBuilder(entity.name)
@@ -201,12 +203,14 @@ export class SeedHandler {
    */
   async reloadFixtures() {
     const entities = await this.getEntities();
-    console.log(entities);
+    // console.log(entities);
 
     const hasIdentity = [true, false, true, true]
     const order = ['PurchaseEntity', 'TransactionEntity', 'ProductEntity', 'CustomerEntity']
     await this.cleanAll(entities, hasIdentity, order);
+    await flushPromises();
     await this.loadAll(entities);
+    await flushPromises();
   }
   createCustomer = () => {
     const gender = faker.random.number(1)
@@ -302,7 +306,7 @@ export class SeedHandler {
       quantity: faker.random.number({ min: 1, max: PRODUCT_QUANTITY }),
       transactionId: transactionId
     };
-    console.log('seed trans');
+    // console.log('seed trans');
     const purchases = this.looper(purchaseCount, this.createPurchase, purchaseContext);
     const transactionCreate = new EntityFactory<TransactionEntity>(TransactionEntity, this.queryRunner);
     const transactionCount = 1;

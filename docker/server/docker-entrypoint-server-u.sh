@@ -17,17 +17,6 @@ fi
 
 . ~/.bashrc
 
-# source colors.cfg
-# filename=$(basename $0)
-
-
-# dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-# PARENT=$(dirname $dir)
-# source "$PARENT/.env"
-# source "$PARENT/colors.cfg"
-# filename=$(basename ${BASH_SOURCE})
-# echo $PROVIDER
-
 echo -e "${CY}The ${YL}${COMPOSE_PROJECT_NAME} ${filename} ${CY}script has been executed"
 
 # https://docs.docker.com/compose/startup-order/
@@ -47,18 +36,16 @@ done
 # The IP address in the connection string is the IP address of the host machine that is running the container.
 else
   echo -e "${GR}Running under ${LB}Sql Server"
-  # sqlcmd -?
-  # sqlcmd -S db.mssql -U test -P  -d ${MSSQL_DB} -q "Select * from vcc.admin_users"
-  # sqlcmd -S 192.168.1.108 -U test -P  -d ${MSSQL_DB} -q "Select * from vcc.admin_users"
   until sqlcmd -S db.mssql -U "${MSSQL_USER}" -P "${MSSQL_PASSWORD}" -d ${MSSQL_DB} -q ":exit"; do
   >&2 echo -e "${GR}Mssql is ${BO}unavailable ${GR}- sleeping"
   sleep 2
 done
 fi
 
->&2 echo -e "${LB}${PROVIDER} Database is up - ${RD}executing command${NC}"
+>&2 echo -e "${LB}${PROVIDER} Database is up - ${RD}executing seed${NC}"
+
+yarn seed:fixtures:read
+
+echo -e "${LB}Seeding done - ${RD}executing server startup command${NC}"
+
 exec $cmd
-
-# while ! nc -z rabbitmq 5672; do sleep 3; done
-
-# exec "$@"

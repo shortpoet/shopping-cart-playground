@@ -11,6 +11,7 @@ export async function customerQuery (entity): Promise<Customer[]> {
     .innerJoinAndSelect('customer.transactions', 'transactions')
     .innerJoinAndSelect('transactions.purchases', 'purchases')
     .innerJoinAndSelect('purchases.product', 'product')
+    .orderBy('customer.id', 'ASC')
     .getMany() as Customer[]
 }
 

@@ -40,7 +40,3 @@ fi
   
 >&2 echo -e "${LB}${PROVIDER} Database is up - ${RD}executing command${NC}"
 exec $cmd
-
-# while ! nc -z rabbitmq 5672; do sleep 3; done
-
-# exec "$@"
