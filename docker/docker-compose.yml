@@ -59,21 +59,21 @@ services:
       - ${COMPOSE_PROJECT_NAME}_net
     command: ["docker-entrypoint-server-u.sh", "db.${PROVIDER}", "yarn", "start"]
 
-  # client.dev.vue:
-  #   image: ${COMPOSE_PROJECT_NAME}.client:alpine
-  #   depends_on:
-  #     - db.${PROVIDER}
-  #   build:
-  #     context: ../
-  #     dockerfile: docker/client/Dockerfile.client.alpine
-  #   tty: true
-  #   environment:
-  #     NODE_ENV: development
-  #   ports:
-  #     - 8080:8080
-  #   volumes:
-  #     - ../client:/usr/src/app
-  #     - notused:/usr/src/app/node_modules
-  #   networks:
-  #     - ${COMPOSE_PROJECT_NAME}net
-  #   command: yarn vite
+  client.dev:
+    image: ${COMPOSE_PROJECT_NAME}.client:alpine
+    depends_on:
+      - db.${PROVIDER}
+    build:
+      context: ../
+      dockerfile: docker/client/Dockerfile.client.alpine
+    tty: true
+    environment:
+      NODE_ENV: development
+    ports:
+      - 8888:8888
+    volumes:
+      - ../client:/usr/src/app
+      - notused:/usr/src/app/node_modules
+    networks:
+      - ${COMPOSE_PROJECT_NAME}_net
+    command: yarn start

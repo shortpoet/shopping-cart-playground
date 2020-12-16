@@ -14,7 +14,7 @@ WORKDIR /usr/src/app
 
 COPY ./client .
 
-EXPOSE 8080
+EXPOSE 8888
 
 COPY docker/client/docker-entrypoint-client-a.sh /usr/local/bin/
 
