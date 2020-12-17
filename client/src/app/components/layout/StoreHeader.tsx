@@ -1,3 +1,4 @@
+import { Layout } from "@constants/layout";
 import React from "react";
 import styled from "styled-components";
 import { color } from "../../../common/theme";
@@ -12,7 +13,7 @@ const HeaderContainer = styled.div<any>`
   justify-content: space-between;
   align-items: center;
   padding: 0rem 1rem;
-  min-height: 6%;
+  min-height: ${Layout.HEADER_HEIGHT};
   background-color: ${color.primary};
   box-shadow: 0 1px 0 0 ${color.box_shadow_tertiary};
 `;
@@ -23,7 +24,7 @@ const Header: React.FC<HeaderProps> = ({ ...props }) => {
 
 const StoreHeader: React.FC<HeaderProps> = ({ ...props }) => {
   return (
-    <HeaderContainer {...props}>
+    <HeaderContainer className="store-header-container" {...props}>
       <Header {...props}/>
       <LogoImg />
     </HeaderContainer>

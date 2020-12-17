@@ -16,7 +16,7 @@ const StyledBody = styled.div`
 `;
 
 const Body: React.FC<any> = ({ children }) => { 
-  return <StyledBody>{ children }</StyledBody>
+  return <StyledBody className="store-body">{ children }</StyledBody>
 };
 
 export default Body;

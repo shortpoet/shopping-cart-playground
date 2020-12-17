@@ -8,7 +8,7 @@ const path = require('path'),
   compiler = webpack(webpackConfig),
   webpackDevMiddleware = require('webpack-dev-middleware')(compiler, {
     noInfo: true,
-    publicPath: webpackConfig.output.path,
+    publicPath: webpackConfig.output.publicPath,
     stats: {
       colors: true
     }

@@ -13,7 +13,7 @@ const StyledLogoImg = styled.img<any>`
 `;
 
 const LogoImg: React.FC<LogoImgProps> = ({ size = 'small', ...props }) => {
-  return <StyledLogoImg src={Layout.LOGO} size={size} {...props} />;
+  return <StyledLogoImg className="styled-logo" src={Layout.LOGO} size={size} {...props} />;
 };
 
 export { LogoImg, LogoImgProps };
