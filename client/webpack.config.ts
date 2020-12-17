@@ -63,7 +63,10 @@ module.exports = isProduction
       ]
     },
     resolve: {
-      extensions: ['.js', '.jsx', '.json', '.ts', '.tsx']
+      extensions: ['.js', '.jsx', '.json', '.ts', '.tsx'],
+      alias: {
+        '@constants': path.resolve(__dirname, 'src/common/constants')
+      }
     },
     node: {
       __dirname: false,

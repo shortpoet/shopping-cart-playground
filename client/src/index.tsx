@@ -1,4 +1,4 @@
-import { Transaction } from "./interfaces/Transaction";
+import { Transaction } from "./common/interfaces/Transaction";
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./app/App";
