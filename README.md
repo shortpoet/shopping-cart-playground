@@ -1,3 +1,7 @@
+---
+permalink: /index.html
+---
+
 # shopping-cart-playground
 
 This is a shopping cart playground.

@@ -32,7 +32,8 @@
     "start": "webpack serve",
     "serve": "webpack serve --config config/webpack.dev.js --progress --profile --watch --content-base src/",
     "devbuild": "webpack --mode development",
-    "build": "webpack --mode production"
+    "build": "webpack --mode production",
+    "build:gh": "webpack --mode production -o ../docs"
   },
   "dependencies": {
     "axios": "^0.21.0",
