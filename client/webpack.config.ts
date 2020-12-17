@@ -4,7 +4,8 @@ import { DefinePlugin } from "webpack";
 const dotenv = require('dotenv');
 const path = require('path'),
   webpack = require('webpack'),
-  HtmlWebpackPlugin = require('html-webpack-plugin');
+  HtmlWebpackPlugin = require('html-webpack-plugin'),
+  CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const isProduction = process.env.NODE_ENV !== 'undefined' && process.env.NODE_ENV === 'production';
 const mode = isProduction ? 'production' : 'development';
@@ -43,7 +44,14 @@ module.exports = (env: any, options: any) => {
       node: {
         __dirname: false,
         __filename: false,
-      }
+      },
+      plugins: [
+        new CopyWebpackPlugin({
+          patterns: [
+            { from: path.resolve(__dirname, 'src/assets'), to: path.resolve(__dirname, 'dist/assets') }
+          ]
+        })
+      ]
     }
     : {
       // dev
@@ -72,7 +80,8 @@ module.exports = (env: any, options: any) => {
         extensions: ['.js', '.jsx', '.json', '.ts', '.tsx'],
         alias: {
           '@constants': path.resolve(__dirname, 'src/common/constants'),
-          '@interfaces': path.resolve(__dirname, 'src/common/interfaces')
+          '@interfaces': path.resolve(__dirname, 'src/common/interfaces'),
+          '@assets': path.resolve(__dirname, 'src/assets')
         }
       },
       node: {
@@ -82,7 +91,13 @@ module.exports = (env: any, options: any) => {
       plugins: [
         new HtmlWebpackPlugin({ template: path.resolve(__dirname, 'public', 'index.html') }),
         new webpack.HotModuleReplacementPlugin(),
-        new DefinePlugin({ 'process.env': JSON.stringify(envFile) })
+        new DefinePlugin({ 'process.env': JSON.stringify(envFile) }),
+        new CopyWebpackPlugin({
+          patterns: [
+            { from: path.resolve(__dirname, 'src/assets'), to: './assets' }
+          ]
+        })
+
       ],
       devServer: {
         contentBase: 'dist',

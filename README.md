@@ -103,7 +103,7 @@ yarn add --dev mssql
 ```bash
 mkdir client && mkdir client/{src,dist} && cd server
 yarn init
-yarn add --dev webpack webpack-cli react react-dom @types/react @types/react-dom @types/node typescript ts-loader source-map-loader chalk html-webpack-plugin webpack-hot-middleware webpack-dev-server ts-node dotenv tslint tslint-react tslint-config-prettier web-vitals
+yarn add --dev webpack webpack-cli react react-dom @types/react @types/react-dom @types/node typescript ts-loader source-map-loader chalk html-webpack-plugin webpack-hot-middleware webpack-dev-server ts-node dotenv tslint tslint-react tslint-config-prettier web-vitals copy-webpack-plugin
 yarn add axios styled-components react react-dom react-router-dom
 tsc --init
 touch {server,webpack.config}.js

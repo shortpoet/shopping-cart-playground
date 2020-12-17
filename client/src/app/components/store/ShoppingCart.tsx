@@ -32,7 +32,8 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({
 
   useEffect(() => {
     const getTransactions = async () => {
-      const transactions = await graphAxios(Queries.TRANSACTIONS);
+      
+      const transactions = await graphAxios(Queries.TRANSACTIONS) || require('@assets/transactionQuery');
       console.log(transactions);
 
       setData(transactions);
