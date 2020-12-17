@@ -59,7 +59,10 @@ config
 # private info
 *data.json
 
-#logs
+# logs
 logs/
 *.log.*
 *.log
+
+# coverage
+*/coverage
