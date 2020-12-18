@@ -1,8 +1,10 @@
 FROM node:12.2.0-alpine
 
-WORKDIR /usr/src
+# this makes webpack 5 fail
+# WORKDIR /usr/src
+WORKDIR /usr/src/app
 
-RUN npm install -g --quiet --silent  webpack-dev-server
+RUN npm install -g --quiet --silent  webpack-dev-server@next webpack-cli
 
 COPY client/package*.json ./
 
@@ -24,6 +26,4 @@ ENTRYPOINT ["docker-entrypoint-client-a.sh"]
 
 LABEL maintainer="Carlos Soriano <shortpoet@github>"
 
-# CMD ["yarn", "--help"]
-
-# docker run --rm -it -v ${PWD}:/usr/src/app -v /usr/src/app/node_modules -p 3000:3000 ${COMPOSE_PROJECT_NAME}.client:alpine
+CMD ["yarn", "start"]

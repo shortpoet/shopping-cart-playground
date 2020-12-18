@@ -7,7 +7,7 @@ const path = require('path'),
   HtmlWebpackPlugin = require('html-webpack-plugin'),
   CopyWebpackPlugin = require('copy-webpack-plugin');
 
-const isProduction = process.env.NODE_ENV !== 'undefined' && process.env.NODE_ENV === 'production';
+const isProduction = process.env.NODE_ENV == 'production';
 const mode = isProduction ? 'production' : 'development';
 const devtool = isProduction ? false : 'source-map'; // inline-source-map
 // const chalkLog = require(path.resolve(__dirname, 'src', 'utils', 'chalkLog.ts'));
@@ -89,22 +89,22 @@ module.exports = (env: any, options: any) => {
         __filename: false,
       },
       plugins: [
-        new HtmlWebpackPlugin({ template: path.resolve(__dirname, 'public', 'index.html') }),
+        new HtmlWebpackPlugin({ template: path.resolve(__dirname, 'public', 'index.html')}),
         new webpack.HotModuleReplacementPlugin(),
         new DefinePlugin({ 'process.env': JSON.stringify(envFile) }),
         new CopyWebpackPlugin({
           patterns: [
             { from: path.resolve(__dirname, 'src/assets'), to: './assets' }
           ]
+
         })
 
       ],
       devServer: {
-        contentBase: 'dist',
+        host: '0.0.0.0',
         historyApiFallback: true,
         port: process.env.PORT,
         hot: true,
-        inline: true,
         open: true
       }
     }

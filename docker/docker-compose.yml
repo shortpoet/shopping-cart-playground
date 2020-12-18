@@ -62,7 +62,8 @@ services:
   client.dev:
     image: ${COMPOSE_PROJECT_NAME}.client:alpine
     depends_on:
-      - db.${PROVIDER}
+      - server.dev
+      # - db.${PROVIDER}
     build:
       context: ../
       dockerfile: docker/client/Dockerfile.client.alpine
@@ -70,10 +71,10 @@ services:
     environment:
       NODE_ENV: development
     ports:
-      - 8888:8888
+      - 127.0.0.1:8888:8888
     volumes:
       - ../client:/usr/src/app
-      - notused:/usr/src/app/node_modules
+      # - notused:/usr/src/app/node_modules
     networks:
       - ${COMPOSE_PROJECT_NAME}_net
     command: yarn start

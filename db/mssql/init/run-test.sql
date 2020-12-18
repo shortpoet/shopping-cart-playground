@@ -24,10 +24,11 @@ DECLARE @pass varchar(64);
 DECLARE @test varchar(64);
 
 
-SET @user = 'test';
+SET @user = 'test_test';
 SET @defaultSchema = 'logistics';
-SET @role = 'LogisticsAppUser_Role';
+SET @role = 'LogisticsTestAppUser_Role';
 SET @authorization = 'dbo';
+SET @pass = '$(MSSQL_PASSWORD)';
 
 --create @user user login
 --create user in  database
@@ -39,6 +40,8 @@ SET @authorization = 'dbo';
 DECLARE @cmd nvarchar(max);
 SET @cmd = 
 'BEGIN
+	
+	CREATE LOGIN '+ @user + ' WITH PASSWORD=N''' + @pass + '''
 	
 	CREATE USER ' + @user + ' FOR LOGIN ' + @user + ' WITH DEFAULT_SCHEMA=' + @defaultSchema + '
 	

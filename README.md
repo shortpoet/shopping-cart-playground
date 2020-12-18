@@ -6,46 +6,54 @@ permalink: /index.html
 
 This is a shopping cart playground.
 
-It uses React for the frontend and SQL, TypeORM, and Express for the backend.
+It uses React for the frontend and MSSQL, TypeORM, and Express for the backend.
 
 Can be run using docker.
+
+Hosted on github pages using static data from test fixtures.
 
 ## usage
 
 - install dependencies
 
 ```bash
+cd server # or cd client
 yarn install
 ```
 
-- launch rest api
+- launch client
 
 ```bash
-yarn start:rest
+cd client
+yarn start
 ```
 
-- launch rest api
+- launch api
 
 ```bash
-yarn start:graph
+cd server
+yarn start
 ```
 
 - run tests
 
 ```bash
+cd server # or cd client
 yarn test
 ```
 
 - setup docker containers using compose
 
 ```bash
+cd docker # must be in docker-compose.yml dir
 ./docker/build.sh
 ```
 
 - run docker containers
 
 ```bash
-docker-compose up
+cd docker # must be in docker-compose.yml dir
+./docker/run.sh
 ```
 
 - take down containers and wipe docker volumes
@@ -78,7 +86,7 @@ docker-compose up
 ./docker/client-run-shell.sh
 ```
 
-- or into running container using docker exec (use 'u' script for ubuntu)
+- or into running container using docker exec
 
 ```bash
 ./docker/client-a-shell.sh
@@ -103,7 +111,7 @@ yarn add --dev mssql
 ```bash
 mkdir client && mkdir client/{src,dist} && cd server
 yarn init
-yarn add --dev webpack webpack-cli react react-dom @types/react @types/react-dom @types/node typescript ts-loader source-map-loader chalk html-webpack-plugin webpack-hot-middleware webpack-dev-server ts-node dotenv tslint tslint-react tslint-config-prettier web-vitals copy-webpack-plugin
+yarn add --dev webpack@next webpack-cli react react-dom @types/react @types/react-dom @types/node typescript ts-loader source-map-loader chalk html-webpack-plugin@next webpack-hot-middleware webpack-dev-server@next ts-node dotenv tslint tslint-react tslint-config-prettier web-vitals copy-webpack-plugin
 yarn add axios styled-components react react-dom react-router-dom
 tsc --init
 touch {server,webpack.config}.js
@@ -112,7 +120,6 @@ touch src/app/{App,index}.tsx
 touch src/app/components/StoreFront.tsx
 mkdir public && touch public/index.html
 ```
-
 
 ## azure
 

@@ -36,7 +36,7 @@ done
 # The IP address in the connection string is the IP address of the host machine that is running the container.
 else
   echo -e "${GR}Running under ${LB}Sql Server"
-  until sqlcmd -S db.mssql -U "${MSSQL_USER}" -P "${MSSQL_PASSWORD}" -d ${MSSQL_DB} -q ":exit"; do
+  until sqlcmd -S db.mssql -U "${MSSQL_USER}" -P "${MSSQL_PASSWORD}" -d "${MSSQL_DB}" -q ":exit"; do
   >&2 echo -e "${GR}Mssql is ${BO}unavailable ${GR}- sleeping"
   sleep 2
 done
